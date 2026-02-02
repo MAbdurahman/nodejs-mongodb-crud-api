@@ -1,0 +1,33 @@
+{
+  "name": "nodejs-mongodb-crud-api",
+  "version": "1.0.0",
+  "description": "Node.js application connecting to MongoDB and defining schemas with Mongoose",
+  "main": "server.js",
+  "repository": "https://github.com/MAbdurahman/nodejs-mongodb-crud-api.git",
+  "author": "Mahdi Abdurrahman <mdbdrrhm@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "SET NODE_ENV=development& nodemon server.js",
+    "prod": "SET NODE_ENV=production& node server.js",
+    "seed:data": "node ./utils/seederUtils.js"
+  },
+  "devDependencies": {
+    "colors": "^1.4.0",
+    "nodemon": "^3.1.11"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.5",
+    "morgan": "^1.10.1"
+  },
+  "nodemonConfig": {
+    "delay": 2000
+  }
+}
