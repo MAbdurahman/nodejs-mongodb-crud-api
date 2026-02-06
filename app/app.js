@@ -21,8 +21,9 @@ if(process.env.NODE_ENV === 'development'){
 app.use(express.json());
 
 /*************************** import all routes ***************************/
+const homeRoute = require('../routes/homePageRoute');
 
 /********************************* routes *********************************/
-
+app.use('/', homeRoute);
 
 module.exports = app;
