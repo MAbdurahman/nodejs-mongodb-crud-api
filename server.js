@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const colors = require('colors');
 const app = require('./app/app');
+const connectDatabase = require('./configs/databaseConfig');
 
 /************************* configure setup *************************/
 dotenv.config({path: './configs/config.env', quiet: true});
@@ -18,6 +19,9 @@ const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const ADDENDUM = `\t\t...press Ctrl+C to terminate.\n`.bold.white;
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost';
+
+/************************* connect MongoDB and Cloudinary *************************/
+connectDatabase().then(() => {});
 
 /********************************** app listening *********************************/
 const server = app.listen(PORT, () => {
