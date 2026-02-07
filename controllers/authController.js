@@ -4,9 +4,7 @@ const messageHandler = require('../utiis/messageHandlerUtil.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {
-   validateFullname,
-   validateEmail,
-   validatePassword
+   validateFullname, validateEmail, validatePassword
 } = require('../utiis/functionsUtil.js');
 
 exports.signUpUser = asyncHandler(async (req, res, next) => {
@@ -49,19 +47,14 @@ exports.signUpUser = asyncHandler(async (req, res, next) => {
 
    /************************* create and save a user *************************/
    const newUser = await new User({
-      fullname,
-      email,
-      password: hashedPassword
+      fullname, email, password: hashedPassword
    });
 
    const user = await newUser.save();
    /************************* successful response *************************/
    res.status(201).json({
-      success: true,
-      message: 'User created successfully!',
-      user: {
-         ...user._doc,
-         password: null
+      success: true, message: 'User created successfully!', user: {
+         ...user._doc, password: null
       }
    });
 
@@ -97,8 +90,7 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
    }
 
    const token = jwt.sign({
-      id: isValidUser._id,
-      role: isValidUser.role
+      id: isValidUser._id, role: isValidUser.role
    }, process.env.JWT_SECRET);
    const {password: pass, ...rest} = isValidUser._doc;
 
@@ -110,9 +102,7 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
 
    res.cookie('access_token', token, {httpOnly: true, expires: expiryDate})
       .status(200).json({
-      success: true,
-      message: 'User signed in successfully!',
-      rest
+      success: true, message: 'User signed in successfully!', rest
    });
 
 });
@@ -120,7 +110,92 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
 exports.signOutUser = asyncHandler(async (req, res, next) => {
    res.clearCookie('access_token');
    res.status(200).json({
+      success: true, message: 'User signed out successfully!'
+   });
+});
+
+exports.getUserProfile = asyncHandler(async (req, res, next) => {
+   const user = await User.findById(req.user.id).select('-password');
+   if (!user) {
+      return next(messageHandler(res, false, 'User not found!', 404));
+   }
+   res.status(200).json({
+      success: true, message: 'User profile retrieved successfully!', user
+   });
+});
+
+exports.updateFullnameAndEmail = asyncHandler(async (req, res, next) => {
+   const {fullname, email} = req.body;
+
+   if (!fullname) {
+      return next(messageHandler(res, false, 'Fullname is required', 400));
+   }
+   if (validateFullname(fullname).isValid === false) {
+      const {error} = validateFullname(fullname);
+      return next(messageHandler(res, false, error, 406));
+   }
+
+   if (!email) {
+      return next(messageHandler(res, false, 'Email is required', 400));
+   }
+   if (validateEmail(email).isValid === false) {
+      const {error} = validateEmail(email);
+      return next(messageHandler(res, false, error, 406));
+   }
+
+   /************************* find out if a user already exists *************************/
+   const userAlreadyExists = await User.findOne({email});
+
+   if (userAlreadyExists) {
+      return next(messageHandler(res, false, 'User already exists!', 409));
+
+   }
+   /************************* find by id and update *************************/
+
+   const newUserData = {
+      fullname, email
+   };
+
+   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+      new: true, runValidators: true, useFindAndModify: false
+   });
+
+   res.status(200).json({
       success: true,
-      message: 'User signed out successfully!'
+      message: 'User profile updated successfully!',
+      user
+   });
+});
+
+
+exports.getAllUsers = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'All users retrieved successfully!', users: await User.find()
+   });
+});
+
+
+exports.getUserDetails = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'User details retrieved successfully!', user: req.user
+   });
+});
+
+exports.updateUserProfile = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'User profile updated successfully!', user: req.user
+   })
+});
+
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+   const user = await User.findById(req.params.id);
+
+   if (!user) {
+      return next(messageHandler(res, false, `User is not found with id: ${req.params.id}`, 404));
+   }
+   await user.remove();
+
+   res.status(200).json({
+      success: true, message: 'User deleted successfully!', user: null
    });
 });
