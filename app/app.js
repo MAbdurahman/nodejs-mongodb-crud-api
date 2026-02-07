@@ -22,10 +22,10 @@ app.use(express.json());
 
 /*************************** import all routes ***************************/
 const homeRoute = require('../routes/homePageRoute');
-const userRoutes = require('../routes/userRoutes');
+const authRoutes = require('../routes/authRoutes');
 
 /********************************* routes *********************************/
 app.use('/', homeRoute);
-app.use('/api/v1.0/users', userRoutes);
+app.use('/api/v1.0/auth', authRoutes);
 
 module.exports = app;

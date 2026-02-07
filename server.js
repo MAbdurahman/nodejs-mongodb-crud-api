@@ -10,7 +10,7 @@ colors.enabled = true;
 /************************* handling Uncaught exceptions *************************/
 process.on('uncaughtException', err => {
    console.log(`uncaughtException ERROR: ${err.stack}`.bold.red);
-   console.log(`  ➔  Server:  Shutting down the due to Uncaught Exception!`.yellow);
+   console.log(`  ➔  Server:  Shutting down the due to Uncaught Exception!`.bold.yellow);
    process.exit(1);
 });
 
