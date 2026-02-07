@@ -17,7 +17,7 @@ process.on('uncaughtException', err => {
 /*********************************** variables ***********************************/
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const ADDENDUM = `\t\t...press Ctrl+C to terminate.\n`.bold.white;
+const ADDENDUM = `\t\t...press Ctrl+C to terminate.`.bold.white;
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost';
 
 /************************* connect MongoDB and Cloudinary *************************/

@@ -14,11 +14,11 @@ const app = express();
 colors.enabled = true;
 
 /************************* middlewares *************************/
-if(process.env.NODE_ENV === 'development'){
+if (process.env.NODE_ENV === 'development') {
    app.use(morgan('dev'));
-   app.use(logger);
 }
 app.use(express.json());
+app.use(logger);
 
 /*************************** import all routes ***************************/
 const homeRoute = require('../routes/homePageRoute');
