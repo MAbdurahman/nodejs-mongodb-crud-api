@@ -3,12 +3,8 @@ const {
    signUpUser,
    signInUser,
    signOutUser,
-   getUserProfile,
-   updateFullnameAndEmail,
-   getAllUsers,
-   getUserDetails,
-   updateUserProfile,
-   deleteUser
+   forgotPasswordUser, resetPasswordUser, getProfile, updateProfile,
+   updatePassword, getAllUsers, updateUserProfile,deleteUserProfile, getUserProfile
 } = require('../controllers/authController');
 const {
    authenticateUser,
@@ -17,15 +13,20 @@ const {
 
 const userRouter = express.Router();
 
-userRouter.post('/sign-up', signUpUser);
-userRouter.post('/sign-in', signInUser);
-userRouter.post('/sign-out', signOutUser);
-userRouter.get('/profile', authenticateUser, getUserProfile);
-userRouter.patch('/profile', authenticateUser, updateFullnameAndEmail);
+userRouter.route('/sign-up').post(signUpUser);
+userRouter.route('/sign-in').post(signInUser);
+userRouter.route('/sign-out').post(signOutUser);
 
-userRouter.get('/admin/users', authenticateUser, authorizeRoles('admin'), getAllUsers);
-userRouter.get('/admin/user/:id', authenticateUser, authorizeRoles('admin'),  getUserDetails);
-userRouter.patch('/admin/user/:id', authenticateUser, authorizeRoles('admin'), updateUserProfile);
-userRouter.delete('/admin/user/:id', authenticateUser, authorizeRoles('admin'), deleteUser);
+userRouter.route('forgot-password').post(forgotPasswordUser);
+userRouter.route('reset-password').patch(resetPasswordUser);
+
+userRouter.route('/user/:userId').get(authenticateUser, getProfile)
+   .patch(authenticateUser, updatePassword)
+   .patch(authenticateUser, updateProfile);
+
+userRouter.route('/admin/users').get(authenticateUser, authorizeRoles('admin'), getAllUsers);
+userRouter.route('/admin/user/:id').get(authenticateUser, authorizeRoles('admin'), getUserProfile)
+   .patch(authenticateUser, authorizeRoles('admin'), updateUserProfile)
+   .delete(authenticateUser, authorizeRoles('admin'), deleteUserProfile);
 
 module.exports = userRouter;

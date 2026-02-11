@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel.js');
-const asyncHandler = require('../utiis/asyncHandlerUtil.js');
-const messageHandler = require('../utiis/messageHandlerUtil.js');
-const ErrorHandler = require('../utiis/errorHandlerUtil.js');
+const asyncHandler = require('../utils/asyncHandlerUtil.js');
+const messageHandler = require('../utils/messageHandlerUtil.js');
+const ErrorHandler = require('../utils/errorHandlerUtil.js');
 
 const authenticateUser = asyncHandler(async (req, res, next) => {
    const token = req.cookies?.access_token;

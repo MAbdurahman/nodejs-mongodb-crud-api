@@ -1,5 +1,7 @@
-const { Schema, model} = require('mongoose');
+const {Schema, model} = require('mongoose');
 
+
+const passCode_pattern = /^\d{6}$/;
 /****************************** schema ******************************/
 const userSchema = new Schema({
       fullname: {
@@ -19,10 +21,20 @@ const userSchema = new Schema({
          trim: true,
          required: [true, 'Password is required!']
       },
+      passCode: {
+         type: Number,
+         trim: true,
+         required: [true, 'Passcode is required!'],
+         match: [passCode_pattern, 'PassCode must be 6 digits!']
+      },
       role: {
          type: String,
          enum: ['user', 'admin'],
          default: 'user'
+      },
+      isLoggedIn: {
+         type: Boolean,
+         default: false
       }
    },
    {timestamps: true}

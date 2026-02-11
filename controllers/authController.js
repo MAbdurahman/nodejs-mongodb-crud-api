@@ -1,11 +1,11 @@
 const User = require('../models/userModel.js');
-const asyncHandler = require('../utiis/asyncHandlerUtil.js');
-const messageHandler = require('../utiis/messageHandlerUtil.js');
+const asyncHandler = require('../utils/asyncHandlerUtil.js');
+const messageHandler = require('../utils/messageHandlerUtil.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {
    validateFullname, validateEmail, validatePassword
-} = require('../utiis/functionsUtil.js');
+} = require('../utils/functionsUtil.js');
 
 exports.signUpUser = asyncHandler(async (req, res, next) => {
    const {fullname, email, password} = req.body;
@@ -90,7 +90,9 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
    }
 
    const token = jwt.sign({
-      id: isValidUser._id, role: isValidUser.role
+      id: isValidUser._id,
+      role: isValidUser.role,
+      isLoggedIn: isValidUser.isLoggedIn = true
    }, process.env.JWT_SECRET);
    const {password: pass, ...rest} = isValidUser._doc;
 
@@ -108,13 +110,93 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.signOutUser = asyncHandler(async (req, res, next) => {
+   const {id} = req.user;
+   const user = await User.findById(id).select('-password');
+   if (!user) {
+      return next(messageHandler(res, false, 'User not found!', 404));
+   }
+
+   user.isLoggedIn = false;
+
+   await user.save();
    res.clearCookie('access_token');
    res.status(200).json({
-      success: true, message: 'User signed out successfully!'
+      success: true, message: 'User signed out successfully!',
+      user: user
+   });
+});
+
+exports.forgotPasswordUser = asyncHandler(async (req, res, next) => {
+
+   res.status(200).json({
+      success: true, message: 'Forgot password user!'
+   });
+});
+
+exports.resetPasswordUser = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'Reset password user!'
+   });
+});
+
+exports.getProfile = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'Profile retrieved successfully!'
+   });
+});
+
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+
+   res.status(200).json({
+      success: true, message: 'Update password successfully!'
+   });
+});
+
+
+exports.updateProfile = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'Update profile successfully!'
+   });
+});
+
+exports.getAllUsers = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true,
+      message: 'All users retrieved successfully!',
+      users: await User.find()
    });
 });
 
 exports.getUserProfile = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'User details retrieved successfully!', user: req.user
+   });
+});
+
+exports.updateUserProfile = asyncHandler(async (req, res, next) => {
+   res.status(200).json({
+      success: true, message: 'User profile updated successfully!', user: req.user
+   })
+});
+
+exports.deleteUserProfile = asyncHandler(async (req, res, next) => {
+   const user = await User.findById(req.params.id);
+
+   if (!user) {
+      return next(messageHandler(res, false, `User is not found with id: ${req.params.id}`, 404));
+   }
+   await user.remove();
+
+   res.status(200).json({
+      success: true, message: 'User deleted successfully!', user: null
+   });
+});
+
+
+
+
+
+/*exports.getUserProfile = asyncHandler(async (req, res, next) => {
    const user = await User.findById(req.user.id).select('-password');
    if (!user) {
       return next(messageHandler(res, false, 'User not found!', 404));
@@ -143,14 +225,14 @@ exports.updateFullnameAndEmail = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, error, 406));
    }
 
-   /************************* find out if a user already exists *************************/
+   /!************************* find out if a user already exists *************************!/
    const userAlreadyExists = await User.findOne({email});
 
    if (userAlreadyExists) {
       return next(messageHandler(res, false, 'User already exists!', 409));
 
    }
-   /************************* find by id and update *************************/
+   /!************************* find by id and update *************************!/
 
    const newUserData = {
       fullname, email
@@ -165,37 +247,4 @@ exports.updateFullnameAndEmail = asyncHandler(async (req, res, next) => {
       message: 'User profile updated successfully!',
       user
    });
-});
-
-
-exports.getAllUsers = asyncHandler(async (req, res, next) => {
-   res.status(200).json({
-      success: true, message: 'All users retrieved successfully!', users: await User.find()
-   });
-});
-
-
-exports.getUserDetails = asyncHandler(async (req, res, next) => {
-   res.status(200).json({
-      success: true, message: 'User details retrieved successfully!', user: req.user
-   });
-});
-
-exports.updateUserProfile = asyncHandler(async (req, res, next) => {
-   res.status(200).json({
-      success: true, message: 'User profile updated successfully!', user: req.user
-   })
-});
-
-exports.deleteUser = asyncHandler(async (req, res, next) => {
-   const user = await User.findById(req.params.id);
-
-   if (!user) {
-      return next(messageHandler(res, false, `User is not found with id: ${req.params.id}`, 404));
-   }
-   await user.remove();
-
-   res.status(200).json({
-      success: true, message: 'User deleted successfully!', user: null
-   });
-});
+});*/
