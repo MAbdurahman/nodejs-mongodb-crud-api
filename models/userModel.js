@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose');
+const validator = require('validator');
 
 
 const passCode_pattern = /^\d{6}$/;
@@ -13,7 +14,8 @@ const userSchema = new Schema({
          type: String,
          trim: true,
          required: [true, 'Email is required!'],
-         unique: [true, 'Email already exists!']
+         unique: [true, 'Email already exists!'],
+         validate: [validator?.isEmail, 'Enter a valid email address!']
 
       },
       password: {
