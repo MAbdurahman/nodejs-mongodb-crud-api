@@ -169,7 +169,10 @@ function validateEmailAndPassword(email, password) {
       };
 
    } else if (!password_trimmed.match(password_pattern)) {
-      return {isValid: false, error: 'Password must be between 8 and 32 characters long!'};
+      return {
+         isValid: false,
+         error: 'Password must be between 8 and 32 characters long!'
+      };
 
    } else {
       return {isValid: true};
@@ -244,7 +247,10 @@ function validatePassword(password) {
       };
 
    } else if (!password_trimmed.match(password_pattern)) {
-      return {isValid: false, error: 'Password must be between 8 and 32 characters long!'};
+      return {
+         isValid: false,
+         error: 'Password must be between 8 and 32 characters long!'
+      };
 
    } else {
       return {isValid: true};
@@ -295,19 +301,64 @@ function validatedFullnameEmailAndPassword(fullname, email, password) {
       return {isValid: false, error: 'Password is required!'};
 
    } else if (!password_trimmed.match(lowercase_pattern)) {
-      return {isValid: false, error: 'Password must contain at least one lowercase letter!'};
+      return {
+         isValid: false,
+         error: 'Password must contain at least one lowercase letter!'
+      };
 
    } else if (!password_trimmed.match(uppercase_pattern)) {
-      return {isValid: false, error: 'Password must contain at least one uppercase letter!'};
+      return {
+         isValid: false,
+         error: 'Password must contain at least one uppercase letter!'
+      };
 
    } else if (!password_trimmed.match(digit_pattern)) {
       return {isValid: false, error: 'Password must contain at least one number!'};
 
    } else if (!password_trimmed.match(special_pattern)) {
-      return {isValid: false, error: `Password must include at least one: '-+_!@#$%^&*?'!`};
+      return {
+         isValid: false,
+         error: `Password must include at least one: '-+_!@#$%^&*?'!`
+      };
 
    } else if (!password_trimmed.match(password_pattern)) {
       return {isValid: false, error: 'Password must be at least 8 characters long!'};
+
+   } else {
+      return {isValid: true};
+   }
+
+}
+
+function validatePassCode(passCode) {
+   let passCode_trimmed = passCode.trim();
+
+   const passCode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
+   const passCode_start_pattern = /^(?=.*[a-z])/g;
+   const passCode_allowable_pattern = /^[a-z0-9]*$/;
+   const passCode_digit_pattern = /^(?=.*\d{1,})/g;
+
+   /************************* passCode conditional statements *************************/
+   if (passCode_trimmed.length === 0) {
+      return {isValid: false, error: 'PassCode is required!'};
+
+   } else if (!passCode_trimmed.match(passCode_start_pattern)) {
+      return {isValid: false, error: 'PassCode must start with a lowercase letter!'};
+
+   } else if (!passCode_trimmed.match(passCode_allowable_pattern)) {
+      return {
+         isValid: false,
+         error: 'PassCode must contain only lowercase letters and numbers!'
+      };
+
+   } else if (!passCode_trimmed.match(passCode_digit_pattern)) {
+      return {isValid: false, error: 'PassCode must contain at least one number!'};
+
+   } else if (!passCode_trimmed.match(passCode_pattern)) {
+      return {
+         isValid: false,
+         error: 'PassCode must be lowercase letters amd numbers, and between 4 and 16 characters!'
+      };
 
    } else {
       return {isValid: true};
@@ -323,5 +374,6 @@ module.exports = {
    validateFullname,
    validateEmail,
    validatePassword,
+   validatePassCode,
    validatedFullnameEmailAndPassword
 }

@@ -2,7 +2,7 @@ const {Schema, model} = require('mongoose');
 const validator = require('validator');
 
 
-const passCode_pattern = /^\d{6}$/;
+const passCode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
 /****************************** schema ******************************/
 const userSchema = new Schema({
       fullname: {
@@ -24,10 +24,10 @@ const userSchema = new Schema({
          required: [true, 'Password is required!']
       },
       passCode: {
-         type: Number,
+         type: String,
          trim: true,
          required: [true, 'Passcode is required!'],
-         match: [passCode_pattern, 'PassCode must be 6 digits!']
+         match: [passCode_pattern, 'PassCode must be 6 characters and start with a lowercase!']
       },
       role: {
          type: String,
