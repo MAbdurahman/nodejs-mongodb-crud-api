@@ -28,7 +28,7 @@ const userSchema = new Schema({
          trim: true,
          required: [true, 'Passcode is required!'],
          validate: {
-            function(value) {
+            validator: function(value) {
                return passcode_pattern.test(value);
             },
             message: 'Passcode must be lowercase, numbers, 6 characters, and start with lowercase!'
