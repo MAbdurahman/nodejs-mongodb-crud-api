@@ -4,11 +4,11 @@ const messageHandler = require('../utils/messageHandlerUtil.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {
-   validateFullname, validateEmail, validatePassword
+   validateFullname, validateEmail, validatePassword, validatePasscode
 } = require('../utils/functionsUtil.js');
 
 exports.signUpUser = asyncHandler(async (req, res, next) => {
-   const {fullname, email, password} = req.body;
+   const {fullname, email, password, passcode} = req.body;
 
    if (!fullname) {
       return next(messageHandler(res, false, 'Fullname is required', 400));
@@ -33,9 +33,16 @@ exports.signUpUser = asyncHandler(async (req, res, next) => {
       const {error} = validatePassword(password);
       return next(messageHandler(res, false, error, 406));
    }
+   if (!passcode) {
+      return next(messageHandler(res, false, 'Passcode is required', 400));
+   }
+   if (validatePasscode(passcode).isValid === false) {
+      const {error} = validatePasscode(passcode);
+      return next(messageHandler(res, false, error, 406));
+   }
 
    /************************* find out if a user already exists *************************/
-   const userAlreadyExists = await User.findOne({email});
+   const userAlreadyExists = await User?.findOne({email});
 
    if (userAlreadyExists) {
       return next(messageHandler(res, false, 'User already exists!', 409));
@@ -44,17 +51,18 @@ exports.signUpUser = asyncHandler(async (req, res, next) => {
    /************************* hashing password *************************/
    const salt = await bcrypt.genSalt(10);
    const hashedPassword = await bcrypt.hash(password, salt);
+   const hashedPasscode = await bcrypt.hash(passcode, salt);
 
    /************************* create and save a user *************************/
    const newUser = await new User({
-      fullname, email, password: hashedPassword
+      fullname, email, password: hashedPassword, passcode: hashedPasscode
    });
 
    const user = await newUser.save();
    /************************* successful response *************************/
    res.status(201).json({
       success: true, message: 'User created successfully!', user: {
-         ...user._doc, password: null
+         ...user._doc, password: null, passcode: null
       }
    });
 
@@ -79,19 +87,19 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, error, 406));
    }
 
-   const isValidUser = await User.findOne({email});
+   const isValidUser = await User?.findOne({email});
    if (!isValidUser) {
       return next(messageHandler(res, false, 'User not found!', 404));
    }
 
-   const hasValidPassword = await bcrypt.compare(password, isValidUser.password);
+   const hasValidPassword = await bcrypt.compare(password, isValidUser?.password);
    if (!hasValidPassword) {
       return next(messageHandler(res, false, 'Invalid credentials!', 401));
    }
 
    const token = jwt.sign({
       id: isValidUser._id,
-      role: isValidUser.role,
+      role: isValidUser?.role,
       isLoggedIn: isValidUser.isLoggedIn = true
    }, process.env.JWT_SECRET);
    const {password: pass, ...rest} = isValidUser._doc;
@@ -111,7 +119,7 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
 
 exports.signOutUser = asyncHandler(async (req, res, next) => {
    const {id} = req.user;
-   const user = await User.findById(id).select('-password');
+   const user = await User?.findById(id).select('-password');
    if (!user) {
       return next(messageHandler(res, false, 'User not found!', 404));
    }

@@ -6,6 +6,7 @@ const logger = require('./../middlewares/loggerMiddleware');
 const expressMongoSanitize = require('@exortek/express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const errorsMiddleware = require('./../middlewares/errorsMiddleware');
 
 /************************* setup config file *************************/
 if (process.env.NODE_ENV !== 'production') {
@@ -31,11 +32,13 @@ const homeRoute = require('../routes/homePageRoute');
 const authRoutes = require('../routes/authRoutes');
 const productRoutes = require('../routes/productRoutes');
 
-
 /********************************* routes *********************************/
 app.use('/', homeRoute);
 app.use('/api/v1.0/auth', authRoutes);
 app.use('/api/v1.0/products', productRoutes);
+
+/*************************** errors middleware ****************************/
+app.use(errorsMiddleware);
 
 
 module.exports = app;

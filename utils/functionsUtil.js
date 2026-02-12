@@ -330,34 +330,34 @@ function validatedFullnameEmailAndPassword(fullname, email, password) {
 
 }
 
-function validatePassCode(passCode) {
-   let passCode_trimmed = passCode.trim();
+function validatePasscode(passcode) {
+   let passcode_trimmed = passcode.trim();
 
-   const passCode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
-   const passCode_start_pattern = /^(?=.*[a-z])/g;
-   const passCode_allowable_pattern = /^[a-z0-9]*$/;
-   const passCode_digit_pattern = /^(?=.*\d{1,})/g;
+   const passcode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
+   const passcode_start_pattern = /^(?=.*[a-z])/g;
+   const passcode_allowable_pattern = /^[a-z0-9]*$/;
+   const passcode_digit_pattern = /^(?=.*\d{1,})/g;
 
    /************************* passCode conditional statements *************************/
-   if (passCode_trimmed.length === 0) {
-      return {isValid: false, error: 'PassCode is required!'};
+   if (passcode_trimmed.length === 0) {
+      return {isValid: false, error: 'Passcode is required!'};
 
-   } else if (!passCode_trimmed.match(passCode_start_pattern)) {
-      return {isValid: false, error: 'PassCode must start with a lowercase letter!'};
+   } else if (!passcode_trimmed.match(passcode_start_pattern)) {
+      return {isValid: false, error: 'Passcode must start with a lowercase letter!'};
 
-   } else if (!passCode_trimmed.match(passCode_allowable_pattern)) {
+   } else if (!passcode_trimmed.match(passcode_allowable_pattern)) {
       return {
          isValid: false,
-         error: 'PassCode must contain only lowercase letters and numbers!'
+         error: 'Passcode must contain only lowercase letters and numbers!'
       };
 
-   } else if (!passCode_trimmed.match(passCode_digit_pattern)) {
-      return {isValid: false, error: 'PassCode must contain at least one number!'};
+   } else if (!passcode_trimmed.match(passcode_digit_pattern)) {
+      return {isValid: false, error: 'Passcode must contain at least one number!'};
 
-   } else if (!passCode_trimmed.match(passCode_pattern)) {
+   } else if (!passcode_trimmed.match(passcode_pattern)) {
       return {
          isValid: false,
-         error: 'PassCode must be lowercase letters amd numbers, and between 4 and 16 characters!'
+         error: 'Passcode must be lowercase letters amd numbers, and between 4 and 16 characters!'
       };
 
    } else {
@@ -374,6 +374,6 @@ module.exports = {
    validateFullname,
    validateEmail,
    validatePassword,
-   validatePassCode,
+   validatePasscode,
    validatedFullnameEmailAndPassword
 }

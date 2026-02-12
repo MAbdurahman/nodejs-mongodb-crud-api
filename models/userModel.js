@@ -2,7 +2,7 @@ const {Schema, model} = require('mongoose');
 const validator = require('validator');
 
 
-const passCode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
+const passcode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
 /****************************** schema ******************************/
 const userSchema = new Schema({
       fullname: {
@@ -23,11 +23,16 @@ const userSchema = new Schema({
          trim: true,
          required: [true, 'Password is required!']
       },
-      passCode: {
+      passcode: {
          type: String,
          trim: true,
          required: [true, 'Passcode is required!'],
-         match: [passCode_pattern, 'PassCode must be 6 characters and start with a lowercase!']
+         validate: {
+            function(value) {
+               return passcode_pattern.test(value);
+            },
+            message: 'Passcode must be lowercase, numbers, 6 characters, and start with lowercase!'
+         }
       },
       role: {
          type: String,

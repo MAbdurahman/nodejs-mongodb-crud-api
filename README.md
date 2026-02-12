@@ -33,6 +33,9 @@ JWT_SECRET=
 JWT_EXPIRES_TIME=
 JWT_LIFETIME='400d'
 
+# Passcode 
+PASS_CODE_SECRET=
+
 # Cloudinary Setup
 
 
