@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const colors = require('colors');
 const logger = require('./../middlewares/loggerMiddleware');
 const expressMongoSanitize = require('@exortek/express-mongo-sanitize');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 /************************* setup config file *************************/
 if (process.env.NODE_ENV !== 'production') {
@@ -19,6 +21,8 @@ if (process.env.NODE_ENV === 'development') {
    app.use(morgan('dev'));
 }
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(expressMongoSanitize());
 app.use(logger);
 
