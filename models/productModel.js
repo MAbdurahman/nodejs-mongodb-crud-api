@@ -1,85 +1,87 @@
-const { Schema, model} = require('mongoose');
+const {Schema, model, Types: {Decimal128}} = require('mongoose');
 
 const productSchema = new Schema({
    name: {
       type: String,
-      required: [true, "Enter the product name!"],
-      trim: true,
+      required: [true, 'Enter the product name!'],
+      trim: true
    },
    description: {
       type: String,
-      required: [true, "Enter the product description!"],
+      required: [true, 'Enter the product description!']
    },
    price: {
-      type: Number,
-      required: [true, "Enter the product price!"],
-      max: [5, "The product price cannot greater than five digits.!"],
+      type: Decimal128,
+      get: (value) => parseFloat(value),
+      set: (value) => new Decimal128(value.toFixed(2)),
+      required: [true, 'Enter the product price!'],
+      max: [5, 'The product price cannot greater than five digits.!']
    },
    ratings: {
       type: Number,
       min: [1, 'Ratings must be between 1 and 5.'],
       max: [5, 'Ratings must be between 1 and 5.'],
-      default: 0,
+      default: 0
    },
    images: [
       {
          public_id: {
             type: String,
-            required: true,
+            required: true
          },
          url: {
             type: String,
-            required: true,
-         },
-      },
+            required: true
+         }
+      }
    ],
    category: {
       type: String,
-      required: [true, "Please Enter Product Category"],
-      enum: ['Technology', 'Electronics', 'Books', 'Furniture', 'Clothing']
+      required: [true, 'Enter product category!'],
+      enum: ['book', 'course', 'clothing', 'electronics', 'furniture', 'technology']
    },
-   Stock: {
+   stock: {
       type: Number,
-      required: [true, "Please Enter product Stock"],
-      maxLength: [4, "Stock cannot exceed 4 characters"],
-      default: 1,
+      required: [true, 'Enter product stock!'],
+      maxLength: [4, 'Stock cannot exceed 4 characters!'],
+      default: 1
    },
    numOfReviews: {
       type: Number,
-      default: 0,
+      default: 0
    },
    reviews: [
       {
          user: {
             type: Schema.ObjectId,
-            ref: "User",
-            required: true,
+            ref: 'User',
+            required: true
          },
          name: {
             type: String,
-            required: true,
+            required: true
          },
          rating: {
             type: Number,
-            required: true,
+            required: true
          },
          comment: {
             type: String,
-            required: true,
-         },
-      },
+            required: true
+         }
+      }
    ],
 
    adminUser: {
       type: Schema.ObjectId,
-      ref: "User",
-      required: true,
+      ref: 'User',
+      required: true
    },
    createdAt: {
       type: Date,
-      default: Date.now,
-   },
+      default: Date.now
+   }
 });
 
-const Product = new model("Product", productSchema);
+const Product = new model('Product', productSchema);
 module.exports = Product;
