@@ -12,15 +12,13 @@ const productSchema = new Schema({
    },
    price: {
       type: Decimal128,
-      get: (value) => parseFloat(value),
-      set: (value) => new Decimal128(value.toFixed(2)),
       required: [true, 'Enter the product price!'],
-      max: [5, 'The product price cannot greater than five digits.!']
+      max: [8, 'The product price cannot greater than eight digits.!']
    },
    ratings: {
       type: Number,
-      min: [1, 'Ratings must be between 1 and 5.'],
-      max: [5, 'Ratings must be between 1 and 5.'],
+      min: [0, 'Ratings must be between 0 and 5.'],
+      max: [5, 'Ratings must be between 0 and 5.'],
       default: 0
    },
    images: [

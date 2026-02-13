@@ -10,7 +10,7 @@
     "start": "node server.js",
     "dev": "SET NODE_ENV=development& nodemon server.js",
     "prod": "SET NODE_ENV=production& node server.js",
-    "seed:data": "node ./utils/seederUtils.js"
+    "seed:data": "node ./utils/seederUtil.js"
   },
   "devDependencies": {
     "colors": "^1.4.0",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@exortek/express-mongo-sanitize": "^1.1.1",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",

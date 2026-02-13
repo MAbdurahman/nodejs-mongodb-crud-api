@@ -8,7 +8,7 @@ const products = require('../data/productsData.js');
 const users = require('../data/usersData.js');
 
 /************************* configure setup *************************/
-dotenv.config({path: '../configs/config.env'});
+dotenv.config({path: './configs/config.env'});
 colors.enabled = true;
 
 /************************* connect MongoDB *************************/
