@@ -1,13 +1,11 @@
-const User = require('../models/userModel.js');
-const asyncHandler = require('../utils/asyncHandlerUtil.js');
-const messageHandler = require('../utils/messageHandlerUtil.js');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const {
-   validateFullname, validateEmail, validatePassword, validatePasscode
-} = require('../utils/functionsUtil.js');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import User from '../models/userModel.js';
+import asyncHandler from '../utils/asyncHandlerUtil.js';
+import messageHandler from '../utils/messageHandlerUtil.js';
+import {validatePasscode, validateEmail, validatePassword, validateFullname} from '../utils/functionsUtil.js';
 
-exports.signUpUser = asyncHandler(async (req, res, next) => {
+export const signUpUser = asyncHandler(async (req, res, next) => {
    const {fullname, email, password, passcode} = req.body;
 
    if (!fullname) {
@@ -68,7 +66,7 @@ exports.signUpUser = asyncHandler(async (req, res, next) => {
 
 });
 
-exports.signInUser = asyncHandler(async (req, res, next) => {
+export const signInUser = asyncHandler(async (req, res, next) => {
    const {email, password} = req.body;
 
    if (!email) {
@@ -117,7 +115,7 @@ exports.signInUser = asyncHandler(async (req, res, next) => {
 
 });
 
-exports.signOutUser = asyncHandler(async (req, res, next) => {
+export const signOutUser = asyncHandler(async (req, res, next) => {
    const {id} = req.user;
    const user = await User?.findById(id).select('-password');
    if (!user) {
@@ -134,26 +132,26 @@ exports.signOutUser = asyncHandler(async (req, res, next) => {
    });
 });
 
-exports.forgotPasswordUser = asyncHandler(async (req, res, next) => {
+export const forgotPasswordUser = asyncHandler(async (req, res, next) => {
 
    res.status(200).json({
       success: true, message: 'Forgot password user!'
    });
 });
 
-exports.resetPasswordUser = asyncHandler(async (req, res, next) => {
+export const resetPasswordUser = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       success: true, message: 'Reset password user!'
    });
 });
 
-exports.getProfile = asyncHandler(async (req, res, next) => {
+export const getProfile = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       success: true, message: 'Profile retrieved successfully!'
    });
 });
 
-exports.updatePassword = asyncHandler(async (req, res, next) => {
+export const updatePassword = asyncHandler(async (req, res, next) => {
 
    res.status(200).json({
       success: true, message: 'Update password successfully!'
@@ -161,13 +159,13 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 });
 
 
-exports.updateProfile = asyncHandler(async (req, res, next) => {
+export const updateProfile = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       success: true, message: 'Update profile successfully!'
    });
 });
 
-exports.getAllUsers = asyncHandler(async (req, res, next) => {
+export const getAllUsers = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       success: true,
       message: 'All users retrieved successfully!',
@@ -175,19 +173,19 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
    });
 });
 
-exports.getUserProfile = asyncHandler(async (req, res, next) => {
+export const getUserProfile = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       success: true, message: 'User details retrieved successfully!', user: req.user
    });
 });
 
-exports.updateUserProfile = asyncHandler(async (req, res, next) => {
+export const updateUserProfile = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       success: true, message: 'User profile updated successfully!', user: req.user
    })
 });
 
-exports.deleteUserProfile = asyncHandler(async (req, res, next) => {
+export const deleteUserProfile = asyncHandler(async (req, res, next) => {
    const user = await User.findById(req.params.id);
 
    if (!user) {

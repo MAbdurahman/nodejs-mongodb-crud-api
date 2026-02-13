@@ -1,11 +1,11 @@
 /************************* imports *************************/
-const dotenv = require('dotenv');
-const colors = require("colors");
-const connectDatabase = require('../configs/databaseConfig.js');
-const Product = require('../models/productModel');
-const User = require('../models/userModel.js');
-const products = require('../data/productsData.js');
-const users = require('../data/usersData.js');
+import dotenv from 'dotenv';
+import colors from 'colors';
+import connectDatabase from '../configs/databaseConfig.js';
+import Product from '../models/productModel.js';
+import User from '../models/userModel.js';
+import products from '../data/productsData.js';
+import users from '../data/usersData.js';
 
 /************************* configure setup *************************/
 dotenv.config({path: './configs/config.env'});

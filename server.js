@@ -1,7 +1,8 @@
-const dotenv = require('dotenv');
-const colors = require('colors');
-const app = require('./app/app');
-const connectDatabase = require('./configs/databaseConfig');
+
+import dotenv from 'dotenv';
+import colors from 'colors';
+import app from './app/app.js'
+import connectDatabase from './configs/databaseConfig.js';
 
 /************************* configure setup *************************/
 dotenv.config({path: './configs/config.env', quiet: true});

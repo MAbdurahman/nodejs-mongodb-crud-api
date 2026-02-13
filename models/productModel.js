@@ -1,4 +1,6 @@
-const {Schema, model, Types: {Decimal128}} = require('mongoose');
+
+import {Schema, model, Types} from 'mongoose';
+const Decimal128 = Types.Decimal128;
 
 const productSchema = new Schema({
    name: {
@@ -82,4 +84,5 @@ const productSchema = new Schema({
 });
 
 const Product = new model('Product', productSchema);
-module.exports = Product;
+
+export default Product;

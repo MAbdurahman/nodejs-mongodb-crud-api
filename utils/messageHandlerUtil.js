@@ -5,4 +5,4 @@ const messageHandler = (res, success, error, statusCode = 400) =>
       statusCode: statusCode
    });
 
-module.exports = messageHandler;
+export default messageHandler;

@@ -1,4 +1,5 @@
-const bcryptjs = require('bcryptjs');
+
+import bcryptjs from 'bcryptjs';
 
 const usersData = [
    {
@@ -94,4 +95,4 @@ const usersData = [
    }
 ];
 
-module.exports = usersData;
+export default usersData;

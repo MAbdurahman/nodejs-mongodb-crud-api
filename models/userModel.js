@@ -1,5 +1,6 @@
-const {Schema, model} = require('mongoose');
-const validator = require('validator');
+
+import {Schema, model} from 'mongoose';
+import validator from 'validator';
 
 
 const passcode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
@@ -48,4 +49,4 @@ const userSchema = new Schema({
 );
 
 const User = new model('User', userSchema);
-module.exports = User;
+export default User;

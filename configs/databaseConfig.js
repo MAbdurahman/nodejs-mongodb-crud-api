@@ -1,6 +1,6 @@
 /************************* imports *************************/
-const colors = require('colors');
-const mongoose = require('mongoose');
+import colors from 'colors';
+import mongoose from 'mongoose';
 
 colors.enable();
 mongoose.set('strictQuery', true);
@@ -15,4 +15,4 @@ const connectDatabase = async () => {
    }
 };
 
-module.exports = connectDatabase;
+export default connectDatabase;

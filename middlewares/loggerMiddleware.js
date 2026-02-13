@@ -1,5 +1,4 @@
-
-const colors = require('colors');
+import colors from 'colors';
 colors.enabled = true;
 
 const logger = function(req, res, next) {
@@ -10,4 +9,4 @@ const logger = function(req, res, next) {
    next();
 }
 
-module.exports = logger;
+export default logger;

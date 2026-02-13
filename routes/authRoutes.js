@@ -1,15 +1,20 @@
-const express = require('express');
-const {
+
+import express from 'express';
+import { authenticateUser, authorizeRoles } from './../middlewares/authMiddleware.js';
+import {
    signUpUser,
+   updatePassword,
+   updateProfile,
+   updateUserProfile,
+   deleteUserProfile,
    signInUser,
+   getAllUsers,
+   forgotPasswordUser,
+   getProfile,
+   getUserProfile,
    signOutUser,
-   forgotPasswordUser, resetPasswordUser, getProfile, updateProfile,
-   updatePassword, getAllUsers, updateUserProfile,deleteUserProfile, getUserProfile
-} = require('../controllers/authController');
-const {
-   authenticateUser,
-   authorizeRoles
-} = require('../middlewares/authMiddleware');
+   resetPasswordUser
+} from '../controllers/authController.js';
 
 const userRouter = express.Router();
 
@@ -29,4 +34,4 @@ userRouter.route('/admin/user/:id').get(authenticateUser, authorizeRoles('admin'
    .patch(authenticateUser, authorizeRoles('admin'), updateUserProfile)
    .delete(authenticateUser, authorizeRoles('admin'), deleteUserProfile);
 
-module.exports = userRouter;
+export default userRouter;

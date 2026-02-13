@@ -1,5 +1,6 @@
-const express = require('express');
-const HomePage = require('./../pages/HomePage');
+
+import express from 'express';
+import HomePage from './../pages/homePage.js';
 
 /************************* variables *************************/
 const homeRouter = express.Router();
@@ -9,4 +10,4 @@ homeRouter.get('/', (req, res) => {
    res.send(HomePage());
 });
 
-module.exports = homeRouter;
+export default homeRouter;

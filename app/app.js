@@ -1,12 +1,12 @@
-const express = require('express');
-const morgan = require('morgan');
-const dotenv = require('dotenv');
-const colors = require('colors');
-const logger = require('./../middlewares/loggerMiddleware');
-const expressMongoSanitize = require('@exortek/express-mongo-sanitize');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const errorsMiddleware = require('./../middlewares/errorsMiddleware');
+import express from 'express';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+import colors from 'colors';
+import logger from './../middlewares/loggerMiddleware.js';
+import expressMongoSanitize from '@exortek/express-mongo-sanitize';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import errorsMiddleware from './../middlewares/errorsMiddleware.js';
 
 /************************* setup config file *************************/
 if (process.env.NODE_ENV !== 'production') {
@@ -28,9 +28,9 @@ app.use(expressMongoSanitize());
 app.use(logger);
 
 /*************************** import all routes ***************************/
-const homeRoute = require('../routes/homePageRoute');
-const authRoutes = require('../routes/authRoutes');
-const productRoutes = require('../routes/productRoutes');
+import homeRoute from '../routes/homePageRoute.js';
+import authRoutes from '../routes/authRoutes.js';
+import productRoutes from '../routes/productRoutes.js';
 
 /********************************* routes *********************************/
 app.use('/', homeRoute);
@@ -40,5 +40,4 @@ app.use('/api/v1.0/products', productRoutes);
 /*************************** errors middleware ****************************/
 app.use(errorsMiddleware);
 
-
-module.exports = app;
+export default app;

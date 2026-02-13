@@ -1,6 +1,8 @@
-const ErrorHandler = require('../utils/errorHandlerUtil');
 
-module.exports = (err, req, res, next) => {
+import ErrorHandler from '../utils/errorHandlerUtil.js';
+import asyncHandler from '../utils/asyncHandlerUtil.js';
+
+const errorsMiddleware = (err, req, res, next) => {
    err.statusCode = err.statusCode || 500;
 
    if (process.env.NODE_ENV === 'DEVELOPMENT') {
@@ -51,3 +53,5 @@ module.exports = (err, req, res, next) => {
       });
    }
 };
+
+export default errorsMiddleware;

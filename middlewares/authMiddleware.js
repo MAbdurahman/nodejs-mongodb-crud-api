@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/userModel.js');
-const asyncHandler = require('../utils/asyncHandlerUtil.js');
-const messageHandler = require('../utils/messageHandlerUtil.js');
-const ErrorHandler = require('../utils/errorHandlerUtil.js');
+import jwt from 'jsonwebtoken';
+import User from '../models/userModel.js';
+import asyncHandler from '../utils/asyncHandlerUtil.js';
+import messageHandler from '../utils/messageHandlerUtil.js';
+import ErrorHandler from '../utils/errorHandlerUtil.js';
 
-const authenticateUser = asyncHandler(async (req, res, next) => {
+export const authenticateUser = asyncHandler(async (req, res, next) => {
    const token = req.cookies?.access_token;
 
    if (!token) {
@@ -18,7 +18,7 @@ const authenticateUser = asyncHandler(async (req, res, next) => {
 
 });
 
-const authorizeRoles = (...roles) => {
+export const authorizeRoles = (...roles) => {
    return (req, res, next) => {
       if (!roles.includes(req.user.role)) {
          return next(
@@ -30,6 +30,3 @@ const authorizeRoles = (...roles) => {
       next();
    }
 }
-
-
-module.exports = {authenticateUser, authorizeRoles}

@@ -294,4 +294,4 @@ const productsData = [
    }
 ];
 
-module.exports = productsData;
+export default productsData;

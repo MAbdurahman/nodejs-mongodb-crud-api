@@ -1,12 +1,8 @@
-const express = require('express');
-const {
-   createProduct, deleteProduct, getSingleProduct, getAllProducts, updateProduct,
-   getAllProductsAdmin, getSingleProductAdmin
-} = require('../controllers/productsController');
-const {
-   authenticateUser,
-   authorizeRoles
-} = require('../middlewares/authMiddleware');
+
+import express from 'express';
+import {authenticateUser, authorizeRoles} from '../middlewares/authMiddleware.js';
+import {createProduct, deleteProduct, getSingleProduct, getAllProducts, updateProduct,
+   getAllProductsAdmin, getSingleProductAdmin} from '../controllers/productsController.js';
 
 const productsRouter = express.Router();
 
@@ -22,4 +18,4 @@ productsRouter.route('/admin/products/:productId').get(getSingleProductAdmin)
    .delete(authenticateUser, authorizeRoles('admin'), deleteProduct)
 
 
-module.exports = productsRouter;
+export default productsRouter;

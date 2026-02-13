@@ -1,11 +1,11 @@
-function getFirstName(fullName) {
+export function getFirstName(fullName) {
    let name = [];
    name = fullName.split(' ');
 
    return name[0];
 }
 
-function getLastName(fullName) {
+export function getLastName(fullName) {
    let name = [];
    name = fullName.split(' ');
 
@@ -19,7 +19,7 @@ function getLastName(fullName) {
    }
 }
 
-function validateUserInfo(userName, fullName, email, password) {
+export function validateUserInfo(userName, fullName, email, password) {
 
    let username_trimmed = userName.trim();
    let fullname_trimmed = fullName.trim();
@@ -123,7 +123,7 @@ function validateUserInfo(userName, fullName, email, password) {
 
 }
 
-function validateEmailAndPassword(email, password) {
+export function validateEmailAndPassword(email, password) {
    let email_trimmed = email.trim();
    let password_trimmed = password.trim();
 
@@ -180,7 +180,7 @@ function validateEmailAndPassword(email, password) {
 
 }
 
-function validateFullname(fullname) {
+export function validateFullname(fullname) {
    let fullname_trimmed = fullname.trim();
 
    const fullname_pattern = /^([a-zA-Z-]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{1,}\s?([a-zA-Z]{1,})?)(,? (?:[JS]r\.?|II|III|IV))?$/g;
@@ -197,7 +197,7 @@ function validateFullname(fullname) {
 
 }
 
-function validateEmail(email) {
+export function validateEmail(email) {
    let email_trimmed = email.trim();
    const email_pattern = /^[!A-Z0-9#$&?*^~_%+-]+(\.[A-Z0-9!_%+-^]+)*?@[A-Z0-9-]+([A-Z0-9.-])*\.[A-Z]{2,}$/i;
 
@@ -213,7 +213,7 @@ function validateEmail(email) {
 
 }
 
-function validatePassword(password) {
+export function validatePassword(password) {
    let password_trimmed = password.trim()
 
    const password_pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[-+_!@#$%^&*?]).{8,32}$/i;
@@ -257,7 +257,7 @@ function validatePassword(password) {
    }
 }
 
-function validatedFullnameEmailAndPassword(fullname, email, password) {
+export function validatedFullnameEmailAndPassword(fullname, email, password) {
    let fullname_trimmed = fullname.trim();
    let email_trimmed = email.trim();
    let password_trimmed = password.trim();
@@ -330,7 +330,7 @@ function validatedFullnameEmailAndPassword(fullname, email, password) {
 
 }
 
-function validatePasscode(passcode) {
+export function validatePasscode(passcode) {
    let passcode_trimmed = passcode.trim();
 
    const passcode_pattern = /^(?=[a-z])(?=.*\d)[a-z0-9]{6}$/;
@@ -364,16 +364,4 @@ function validatePasscode(passcode) {
       return {isValid: true};
    }
 
-}
-
-module.exports = {
-   getFirstName,
-   getLastName,
-   validateUserInfo,
-   validateEmailAndPassword,
-   validateFullname,
-   validateEmail,
-   validatePassword,
-   validatePasscode,
-   validatedFullnameEmailAndPassword
 }

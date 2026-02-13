@@ -171,4 +171,4 @@ function HomePage() {
     </html>`
 }
 
-module.exports = HomePage;
+export default HomePage;
