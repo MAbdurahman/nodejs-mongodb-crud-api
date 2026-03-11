@@ -143,39 +143,54 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
    });
 });
 
-
 export const updateProfile = asyncHandler(async (req, res, next) => {
+
    res.status(200).json({
       success: true, message: 'Update profile successfully!'
    });
 });
 
 export const getAllUsers = asyncHandler(async (req, res, next) => {
+   const users = await User.find();
+
+   if (!users) {
+      return next(messageHandler(res, false, `This resource ${User} does not exist!`, 404));
+   }
+   const count = await User.countDocuments({});
+
    res.status(200).json({
       success: true,
       message: 'All users retrieved successfully!',
-      users: await User.find()
+      count: count,
+      users: users
    });
 });
 
 export const getSingleUser = asyncHandler(async (req, res, next) => {
-   /*console.log(req.user);*/
-   // const user = await User.findById(req.user._id);
+   const user = await User.findById(req.params.id).select('-password');
+
+   if (!user) {
+      return next(messageHandler(res, false, `User does not found with id: ${req.params.id}`, 404));
+   }
+
    res.status(200).json({
-      success: true, message: 'Profile retrieved successfully!'
+      success: true,
+      message: 'Single user retrieved successfully!',
+      user: user
    });
 });
 
 export const deleteUser = asyncHandler(async (req, res, next) => {
-   const user = await User.findById(req.params.id);
+   const user = await User.findById(req.params.id).select('+password');
 
    if (!user) {
       return next(messageHandler(res, false, `User is not found with id: ${req.params.id}`, 404));
    }
-   await user.remove();
+
+   await User.deleteOne({ _id: user._id });
 
    res.status(200).json({
-      success: true, message: 'User deleted successfully!', user: null
+      success: true, message: 'User deleted successfully!', user: {}
    });
 });
 
