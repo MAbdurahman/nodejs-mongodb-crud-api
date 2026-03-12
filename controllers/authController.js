@@ -3,15 +3,15 @@ import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import asyncHandler from '../utils/asyncHandlerUtil.js';
 import messageHandler from '../utils/messageHandlerUtil.js';
+import setCookieAndToken from '../utils/setCookieAndTokenUtil.js';
 import {
-   validatePasscode,
    validateEmail,
    validatePassword,
    validateFullname
 } from '../utils/functionsUtil.js';
 
 export const signUpUser = asyncHandler(async (req, res, next) => {
-   const {fullname, email, password, passcode} = req.body;
+   const {fullname, email, password} = req.body;
 
    if (!fullname) {
       return next(messageHandler(res, false, 'Fullname is required', 400));
@@ -36,15 +36,8 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
       const {error} = validatePassword(password);
       return next(messageHandler(res, false, error, 406));
    }
-   if (!passcode) {
-      return next(messageHandler(res, false, 'Passcode is required', 400));
-   }
-   if (validatePasscode(passcode).isValid === false) {
-      const {error} = validatePasscode(passcode);
-      return next(messageHandler(res, false, error, 406));
-   }
 
-   /************************* find out if a user already exists *************************/
+   /************************* find out if an user already exists *************************/
    const userAlreadyExists = await User?.findOne({email});
 
    if (userAlreadyExists) {
@@ -52,23 +45,15 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
 
    }
 
-   /************************* hashing password *************************/
-   const salt = await bcrypt.genSalt(10);
-   const hashedPassword = await bcrypt.hash(password, salt);
-   const hashedPasscode = await bcrypt.hash(passcode, salt);
-
    /************************* create and save a user *************************/
-   const newUser = await new User({
-      fullname, email, password: hashedPassword, passcode: hashedPasscode
-   });
+   const newUser = await User.create({
+      fullname,
+      email,
+      password
+   })
 
-   const user = await newUser.save();
-   /************************* successful response *************************/
-   res.status(201).json({
-      success: true, message: 'User created successfully!', user: {
-         ...user._doc, password: null, passcode: null
-      }
-   });
+   /**************** set and create Cookie and JSON Web Token *****************/
+   setCookieAndToken(newUser, res, 201);
 
 });
 
