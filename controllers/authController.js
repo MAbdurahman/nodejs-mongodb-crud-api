@@ -53,6 +53,7 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
    })
 
    /**************** set and create Cookie and JSON Web Token *****************/
+
    setCookieAndToken(newUser, res, 201);
 
 });
@@ -81,35 +82,20 @@ export const signInUser = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, 'User not found!', 404));
    }
 
-   const hasValidPassword = await bcrypt.compare(password, isValidUser?.password);
+   const hasValidPassword = await isValidUser.comparePassword(password);
    if (!hasValidPassword) {
       return next(messageHandler(res, false, 'Invalid credentials!', 401));
    }
 
-   const token = jwt.sign({
-      id: isValidUser._id,
-      role: isValidUser?.role,
-      isLoggedIn: isValidUser.isLoggedIn = true
-   }, process.env.JWT_SECRET);
+   const user = toggleLoginStatus(isValidUser.id);
 
-   const {password: pass, ...rest} = isValidUser._doc;
-
-   const milliseconds_minute = 60000;
-   const milliseconds_hour = milliseconds_minute * 60;
-   const milliseconds_day = milliseconds_hour * 24;
-   const milliseconds_week = milliseconds_day * 7;
-   const milliseconds_month = milliseconds_day * 30;
-   const expiryDate = new Date(Date.now() + milliseconds_week);
-
-   res.cookie('access_token', token, {httpOnly: true, expires: expiryDate})
-      .status(200).json({
-      success: true, message: 'User signed in successfully!', user: rest,
-      token
-   });
+   setCookieAndToken(user, res, 200);
 
 });
 
 export const signOutUser = asyncHandler(async (req, res, next) => {
+   toggleLoginStatus(req.params.id);
+
    res.cookie('access_token', null, {
       expires: new Date(Date.now()),
       httpOnly: true
@@ -215,8 +201,8 @@ const toggleLoginStatus = asyncHandler(async (userId, res, next) => {
       user.isLoggedIn = !user.isLoggedIn; // Toggle the property
       await user.save(); // Save the updated user
       return user; // Return the updated user
-   } catch (error) {
-      throw new Error(error.message);
+   } catch (err) {
+      return next(messageHandler(res, false, `message: ${err.message}!`, 500));
    }
 });
 
