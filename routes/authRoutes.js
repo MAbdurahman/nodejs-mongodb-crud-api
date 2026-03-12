@@ -19,12 +19,12 @@ authRouter.post('/sign-up', signUpUser);
 authRouter.post('/sign-in', signInUser);
 authRouter.post('/sign-out', signOutUser);
 
-authRouter.patch('/update-password/:id', updatePassword);
-authRouter.put('/update-profile/:id', updateProfile);
+authRouter.patch('/update-password/:userId', updatePassword);
+authRouter.put('/update-profile/:userId', updateProfile);
 
 authRouter.get('/get-all-users', getAllUsers);
-authRouter.get('/get-user/:id', getSingleUser);
+authRouter.get('/get-user/:userId', getSingleUser);
 
-authRouter.delete('/delete-user/:id', deleteUser)
+authRouter.delete('/delete-user/:userId', deleteUser)
 
 export default authRouter;

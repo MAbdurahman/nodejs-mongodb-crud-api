@@ -1,5 +1,4 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
 import asyncHandler from '../utils/asyncHandlerUtil.js';
 import messageHandler from '../utils/messageHandlerUtil.js';
@@ -52,9 +51,14 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
       password
    })
 
-   /**************** set and create Cookie and JSON Web Token *****************/
+   const token = await newUser.generateJsonWebToken();
 
-   setCookieAndToken(newUser, res, 201);
+   res.status(201).json({
+      message: 'User signed up successfully.',
+      success: true,
+      user: newUser
+   })
+
 
 });
 
@@ -87,7 +91,9 @@ export const signInUser = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, 'Invalid credentials!', 401));
    }
 
-   const user = toggleLoginStatus(isValidUser.id);
+   console.log(isValidUser);
+
+   const user = toggleLoginStatus(isValidUser._id);
 
    setCookieAndToken(user, res, 200);
 
@@ -197,18 +203,14 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
 });
 
 const toggleLoginStatus = asyncHandler(async (userId, res, next) => {
-   try {
-      const user = await User.findById(userId);
-      if (!user) {
-         return next(messageHandler(res, false, 'User not found!', 404));
-      }
-
-      user.isLoggedIn = !user.isLoggedIn; // Toggle the property
-      await user.save(); // Save the updated user
-      return user; // Return the updated user
-   } catch (err) {
-      return next(messageHandler(res, false, `message: ${err.message}!`, 500));
+   const user = await User.findById(userId);
+   if (!user) {
+      return next(messageHandler(res, false, 'User not found!', 404));
    }
+
+   user.isLoggedIn = !user.isLoggedIn; // Toggle the property
+   await user.save(); // Save the updated user
+   return user; // Return the updated user
 });
 
 /*exports.getUserProfile = asyncHandler(async (req, res, next) => {
