@@ -94,7 +94,10 @@ export const signInUser = asyncHandler(async (req, res, next) => {
 });
 
 export const signOutUser = asyncHandler(async (req, res, next) => {
-   toggleLoginStatus(req.params.id);
+   const user = toggleLoginStatus(req.params.id);
+   if (!user) {
+      return next(messageHandler(res, false, 'User not found!', 404));
+   }
 
    res.cookie('access_token', null, {
       expires: new Date(Date.now()),
@@ -102,7 +105,9 @@ export const signOutUser = asyncHandler(async (req, res, next) => {
    });
 
    res.status(200).json({
-      success: true, message: 'User signed out successfully!'
+      success: true,
+      message: 'User signed out successfully!',
+      userLoggedIn: user.isLoggedIn
 
    });
 });
@@ -184,7 +189,7 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, `User is not found with id: ${req.params.id}`, 404));
    }
 
-   await User.deleteOne({ _id: user._id });
+   await User.deleteOne({_id: user._id});
 
    res.status(200).json({
       success: true, message: 'User deleted successfully!', user: {}
