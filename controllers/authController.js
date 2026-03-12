@@ -137,9 +137,35 @@ export const signOutUser = asyncHandler(async (req, res, next) => {
 });
 
 export const updatePassword = asyncHandler(async (req, res, next) => {
+   const {id} = req.params;
+   const {password} = req.body;
+
+   if (!password) {
+      return next(messageHandler(res, false, 'Password is required', 400));
+   }
+   if (validatePassword(password).isValid === false) {
+      const {error} = validatePassword(password);
+      return next(messageHandler(res, false, error, 406));
+   }
+
+   const user = await User.findById(id);
+   if (!user) {
+      return next(messageHandler(res, false, 'User not found!', 404));
+   }
+
+   /************************* hashing password *************************/
+   const salt = await bcrypt.genSalt(10);
+   user.password = await bcrypt.hash(password, salt);
+
+   console.log(user.password);
+
+   await User.updateOne({id: user.id}, {password}, {new: true});
+
+   const userInformation = await User.findById(user._id)
 
    res.status(200).json({
-      success: true, message: 'Update password successfully!'
+      success: true, message: 'Update password successfully!',
+      user: userInformation
    });
 });
 
@@ -194,6 +220,20 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
    });
 });
 
+const toggleLoginStatus = asyncHandler(async (userId, res, next) => {
+   try {
+      const user = await User.findById(userId);
+      if (!user) {
+         return next(messageHandler(res, false, 'User not found!', 404));
+      }
+
+      user.isLoggedIn = !user.isLoggedIn; // Toggle the property
+      await user.save(); // Save the updated user
+      return user; // Return the updated user
+   } catch (error) {
+      throw new Error(error.message);
+   }
+});
 
 /*exports.getUserProfile = asyncHandler(async (req, res, next) => {
    const user = await User.findById(req.user.id).select('-password');
