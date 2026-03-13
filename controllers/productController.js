@@ -4,9 +4,12 @@ import messageHandler from '../utils/messageHandlerUtil.js';
 
 export const createProduct = asyncHandler(async (req, res, next) => {
 
-	res.statusCode(201).json({
+   const product = await Product.create(req.body);
+
+	res.status(201).json({
+		message: 'Admin - product created successfully!',
 		success: true,
-		message: 'Product created successfully!',
+      product
 	});
 });
 
