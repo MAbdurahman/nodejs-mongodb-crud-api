@@ -1,6 +1,7 @@
 import Product from '../models/productModel.js';
 import asyncHandler from '../utils/asyncHandlerUtil.js';
 import messageHandler from '../utils/messageHandlerUtil.js';
+import APIFeatures from '../utils/apiFeaturesUtil.js';
 
 export const createProduct = asyncHandler(async (req, res, next) => {
 
@@ -14,18 +15,25 @@ export const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 export const getAllProducts = asyncHandler(async (req, res, next) => {
-	const products = await Product.find();
+	/* const resPerPage = 4;
+	const productsCount = await Product.countDocuments(); */
 
-	if (!products) {
-		return next(messageHandler(res, 'Products not found!', 404));
-	}
-	const count = await Product.countDocuments();
+	const apiFeatures = new APIFeatures(Product.find(), req.query)
+		.search()
+		
+
+	let products = await apiFeatures.query;
+	const filteredProducts = products.length;
+	
+
+	
+	
 
 	res.status(200).json({
-		count: count,
-		message: 'All products for user retrieved successfully!',
+		filteredProducts: filteredProducts,
+		message: 'Products retrieved successfully!',
 		success: true,
-		products: products,
+		products,
 	});
 });
 
