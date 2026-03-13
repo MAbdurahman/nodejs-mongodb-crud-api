@@ -6,25 +6,13 @@ import {createProduct, deleteProduct, getSingleProduct, getAllProducts, updatePr
 
 const productsRouter = express.Router();
 
+productsRouter.get('/get-all-products', getAllProducts);
+productsRouter.get('/:productId', getSingleProduct);
 
-productsRouter.get('/product/get-all-products', getAllProducts);
-productsRouter.get('/product/:productId', getSingleProduct);
-productsRouter.put('/product/:productId', updateProduct);
-productsRouter.delete('/product/:productId', deleteProduct);
-
-/*productsRouter.route('/products').get(getAllProducts)
-productsRouter.route('/:productId').get(getSingleProduct)*/
-
-/*productsRouter.route('/products').get(getAllProducts)
-
-productsRouter.route('/:productId').get(getSingleProduct)
-
-productsRouter.route('/admin/products').post(authenticateUser, authorizeRoles('admin'), createProduct)
-   .get(authenticateUser, authorizeRoles('admin'), getAllProductsAdmin)
-
-productsRouter.route('/admin/products/:productId').get(getSingleProductAdmin)
-   .patch(authenticateUser, authorizeRoles('admin'), updateProduct)
-   .delete(authenticateUser, authorizeRoles('admin'), deleteProduct)*/
-
+productsRouter.get('/admin/get-all-products', getAllProductsAdmin);
+productsRouter.get('/admin/:productId', getSingleProductAdmin);
+productsRouter.post('/admin/create-product', createProduct);
+productsRouter.put('admin/:productId', updateProduct);
+productsRouter.delete('/:productId', deleteProduct);
 
 export default productsRouter;
