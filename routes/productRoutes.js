@@ -6,8 +6,14 @@ import {createProduct, deleteProduct, getSingleProduct, getAllProducts, updatePr
 
 const productsRouter = express.Router();
 
-productsRouter.route('/products').get(getAllProducts)
-productsRouter.route('/:productId').get(getSingleProduct)
+
+productsRouter.get('/product/get-all-products', getAllProducts);
+productsRouter.get('/product/:productId', getSingleProduct);
+productsRouter.put('/product/:productId', updateProduct);
+productsRouter.delete('/product/:productId', deleteProduct);
+
+/*productsRouter.route('/products').get(getAllProducts)
+productsRouter.route('/:productId').get(getSingleProduct)*/
 
 /*productsRouter.route('/products').get(getAllProducts)
 

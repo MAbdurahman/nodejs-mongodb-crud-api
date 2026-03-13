@@ -35,7 +35,7 @@ import productRoutes from '../routes/productRoutes.js';
 /******************************** routes ********************************/
 app.use('/', homeRoute);
 app.use('/api/v1.0/auth', authRoutes);
-app.use('/api/v1.0/product', productRoutes);
+app.use('/api/v1.0', productRoutes);
 
 /*************************** errors middleware ****************************/
 app.use(errorsMiddleware);

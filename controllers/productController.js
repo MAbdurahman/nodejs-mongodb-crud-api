@@ -2,6 +2,7 @@
 import Product from '../models/productModel.js';
 import asyncHandler from '../utils/asyncHandlerUtil.js';
 import messageHandler from '../utils/messageHandlerUtil.js';
+import productsRouter from '../routes/productRoutes.js';
 
 export const createProduct = asyncHandler(async (req, res, next) => {
 
@@ -12,10 +13,17 @@ export const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 export const getAllProducts = asyncHandler(async (req, res, next) => {
+   const products = await Product.find();
+
+   if (!products) {
+      return next(messageHandler(res, 'Products not found!', 404));
+   }
+
 
    res.statusCode(200).json({
+      message: 'All products for user retrieved successfully!',
       success: true,
-      message: 'All products for user retrieved successfully!'
+      products: products,
    });
 
 });

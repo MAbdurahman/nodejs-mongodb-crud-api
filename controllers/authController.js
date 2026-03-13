@@ -3,6 +3,7 @@ import User from '../models/userModel.js';
 import asyncHandler from '../utils/asyncHandlerUtil.js';
 import messageHandler from '../utils/messageHandlerUtil.js';
 import setCookieAndToken from '../utils/setCookieAndTokenUtil.js';
+import {getFirstName} from '../utils/functionsUtil.js';
 import {
    validateEmail,
    validatePassword,
@@ -54,7 +55,7 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
    const token = await newUser.generateJsonWebToken();
 
    res.status(201).json({
-      message: 'User signed up successfully.',
+      message: `${getFirstName(fullname)} signed up successfully!`,
       success: true,
       user: newUser
    })
@@ -92,10 +93,30 @@ export const signInUser = asyncHandler(async (req, res, next) => {
    }
 
    console.log(isValidUser);
-
    const user = toggleLoginStatus(isValidUser._id);
 
-   setCookieAndToken(user, res, 200);
+   console.log('user - ',user)
+
+   const token = await user.generateJsonWebToken();
+   console.log('token - ',token);
+
+   const {password: pass, ...rest} = user._doc;
+   /*setCookieAndToken(user, res, 200);*/
+
+   const milliseconds_minute = 60000;
+   const milliseconds_hour = milliseconds_minute * 60;
+   const milliseconds_day = milliseconds_hour * 24;
+   const milliseconds_week = milliseconds_day * 7;
+   const milliseconds_month = milliseconds_day * 30;
+   const expiryDate = new Date(Date.now() + milliseconds_week);
+
+   res.cookie('access_token', token, {httpOnly: true, expires: expiryDate})
+      .status(200).json({
+      message: `${getFirstName(user.fullname)} signed in successfully!`,
+      success: true,
+      user: rest,
+      token
+   });
 
 });
 
