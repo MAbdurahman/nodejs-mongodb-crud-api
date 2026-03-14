@@ -17,6 +17,8 @@ export const createProduct = asyncHandler(async (req, res, next) => {
 export const getAllProducts = asyncHandler(async (req, res, next) => {
 	/* const resPerPage = 4;
 	const productsCount = await Product.countDocuments(); */
+	const resultsPerPage = 4;
+	const productsCount = await Product.countDocuments();
 
 	const apiFeatures = new APIFeatures(Product.find(), req.query)
 		.search()
@@ -25,6 +27,8 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
 
 	let products = await apiFeatures.query;
 	const filteredProducts = products.length;
+
+
 	
 
 	
@@ -32,6 +36,8 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
 
 	res.status(200).json({
 		filteredProducts: filteredProducts,
+		productsCount: productsCount,
+		resultsPerPage: resultsPerPage,
 		message: 'Products retrieved successfully!',
 		success: true,
 		products,

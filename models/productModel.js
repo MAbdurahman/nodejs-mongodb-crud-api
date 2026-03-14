@@ -1,6 +1,6 @@
 
 import {Schema, model, Types} from 'mongoose';
-const Decimal128 = Types.Decimal128;
+
 
 const productSchema = new Schema({
 	name: {
@@ -13,9 +13,9 @@ const productSchema = new Schema({
 		required: [true, 'Enter the product description!'],
 	},
 	price: {
-		type: Decimal128,
+		type: Number,
 		required: [true, 'Enter the product price!'],
-		max: [7, 'The product price cannot be greater than seven digits.!'],
+		maxLength: [8, 'The product price cannot be greater than eight digits.!'],
       default: 0.00
 	},
 	ratings: {
