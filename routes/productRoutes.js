@@ -1,8 +1,17 @@
-
 import express from 'express';
-import {authenticateUser, authorizeRoles} from '../middlewares/authMiddleware.js';
-import {createProduct, deleteProduct, getSingleProduct, getAllProducts, updateProduct,
-   getAllProductsAdmin, getSingleProductAdmin} from '../controllers/productController.js';
+import {
+	createProduct,
+	deleteProduct,
+	getSingleProduct,
+	getAllProducts,
+	updateProduct,
+	getAllProductsAdmin,
+	getSingleProductAdmin,
+} from '../controllers/productController.js';
+import {
+	authenticateUser,
+	authorizeRoles,
+} from '../middlewares/authMiddleware.js';
 
 const productsRouter = express.Router();
 
@@ -13,6 +22,6 @@ productsRouter.get('/admin/get-all-products', getAllProductsAdmin);
 productsRouter.get('/admin/:productId', getSingleProductAdmin);
 productsRouter.post('/admin/create-product', createProduct);
 productsRouter.put('admin/:productId', updateProduct);
-productsRouter.delete('/:productId', deleteProduct);
+productsRouter.delete('admin/:productId', deleteProduct);
 
 export default productsRouter;

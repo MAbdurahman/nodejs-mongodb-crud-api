@@ -21,19 +21,19 @@ class APIFeatures {
    filter() {
 		const queryCopy = { ...this.queryStr };
 
-		//   Removing some fields for category
+		//Removing some fields for category
 		const removeFields = ['keyword'];
 
 		removeFields.forEach(elem => delete queryCopy[elem]);
 
-		// Filter For Price and Rating
 		/* let queryStr = JSON.stringify(queryCopy);
-
+      
       queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`); */
-
+      
 		// this.query = this.query.find(JSON.parse(queryStr));
-		// Advance filter for price, ratings etc
+		// Filter For Price and Rating
 		let queryStr = JSON.stringify(queryCopy);
+		// Advance filter for price, ratings etc
 		queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
 		this.query = this.query.find(JSON.parse(queryStr));
 		
