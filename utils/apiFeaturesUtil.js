@@ -22,28 +22,25 @@ class APIFeatures {
 	filter() {
 		const queryCopy = { ...this.queryStr };
 
-		// Removing fields from the query
-		const removeFields = ['keyword'];
+		// removing fields from the query
+		const removeFields = ['keyword', 'page', 'limit'];
 		removeFields.forEach(el => delete queryCopy[el]);
 
 		// filtering for price, ratings, etcetera
 		let queryStr = JSON.stringify(queryCopy);
-		queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
-		console.log('queryStr', queryStr)
+		queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
 
 		this.query = this.query.find(JSON.parse(queryStr));
 		return this;
 	}
 
-	/*    pagination(resultPerPage) {
-      const currentPage = Number(this.queryStr.page) || 1;
+	pagination(resPerPage) {
+		const currentPage = Number(this.queryStr.page) || 1;
+		const skip = resPerPage * (currentPage - 1);
 
-      const skip = resultPerPage * (currentPage - 1);
-
-      this.query = this.query.limit(resultPerPage).skip(skip);
-
-      return this;
-   } */
+		this.query = this.query.limit(resPerPage).skip(skip);
+		return this;
+	}
 }
 
 export default APIFeatures;

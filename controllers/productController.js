@@ -5,6 +5,8 @@ import APIFeatures from '../utils/apiFeaturesUtil.js';
 
 export const createProduct = asyncHandler(async (req, res, next) => {
 
+	
+
    const product = await Product.create(req.body);
 
 	res.status(201).json({
@@ -15,9 +17,7 @@ export const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 export const getAllProducts = asyncHandler(async (req, res, next) => {
-	/* const resPerPage = 4;
-	const productsCount = await Product.countDocuments(); */
-	const resultsPerPage = 4;
+	const resPerPage = 4;
 	const productsCount = await Product.countDocuments();
 
 	const apiFeatures = new APIFeatures(Product.find(), req.query)
@@ -26,20 +26,18 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
 		
 
 	let products = await apiFeatures.query;
-	const filteredProducts = products.length;
+	let filteredProducts = products.length;
 
-
-	
-
-	
+	apiFeatures.pagination(resPerPage);
+	products = await apiFeatures.query.clone();
 	
 
 	res.status(200).json({
-		filteredProducts: filteredProducts,
-		productsCount: productsCount,
-		resultsPerPage: resultsPerPage,
 		message: 'Products retrieved successfully!',
 		success: true,
+		filteredProducts: filteredProducts,
+		productsCount: productsCount,
+		resultsPerPage: resPerPage,
 		products,
 	});
 });
