@@ -10,6 +10,7 @@ import {
    getSingleUser,
    deleteUser
 } from '../controllers/authController.js';
+import { authenticateUser } from '../middlewares/authMiddleware.js';
 
 /************************** variables **************************/
 const authRouter = express.Router();
@@ -17,7 +18,7 @@ const authRouter = express.Router();
 /*************************** routes ***************************/
 authRouter.post('/sign-up', signUpUser);
 authRouter.post('/sign-in', signInUser);
-authRouter.post('/sign-out', signOutUser);
+authRouter.post('/sign-out/', authenticateUser, signOutUser);
 
 authRouter.patch('/update-password/:userId', updatePassword);
 authRouter.put('/update-profile/:userId', updateProfile);

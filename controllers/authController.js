@@ -97,9 +97,9 @@ export const signInUser = asyncHandler(async (req, res, next) => {
 });
 
 export const signOutUser = asyncHandler(async (req, res, next) => {
-   const {userId} = req.params;
-   const user = await User.findById(userId);
    
+const user = req.user;
+
    if (!user) {
       return next(messageHandler(res, false, 'User not found!', 404));
    }
@@ -113,8 +113,6 @@ export const signOutUser = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       message: 'User signed out successfully!',
       success: true,
-      isLoggedIn: user.isLoggedIn
-   
 
    });
 });
