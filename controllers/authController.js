@@ -92,31 +92,7 @@ export const signInUser = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, 'Invalid credentials!', 401));
    }
 
-   console.log(isValidUser);
-   const user = toggleLoginStatus(isValidUser._id);
-
-   console.log('user - ',user)
-
-   const token = await user.generateJsonWebToken();
-   console.log('token - ',token);
-
-   const {password: pass, ...rest} = user._doc;
-   /*setCookieAndToken(user, res, 200);*/
-
-   const milliseconds_minute = 60000;
-   const milliseconds_hour = milliseconds_minute * 60;
-   const milliseconds_day = milliseconds_hour * 24;
-   const milliseconds_week = milliseconds_day * 7;
-   const milliseconds_month = milliseconds_day * 30;
-   const expiryDate = new Date(Date.now() + milliseconds_week);
-
-   res.cookie('access_token', token, {httpOnly: true, expires: expiryDate})
-      .status(200).json({
-      message: `${getFirstName(user.fullname)} signed in successfully!`,
-      success: true,
-      user: rest,
-      token
-   });
+   setCookieAndToken(isValidUser, res, 200);
 
 });
 
@@ -132,8 +108,8 @@ export const signOutUser = asyncHandler(async (req, res, next) => {
    });
 
    res.status(200).json({
-      success: true,
       message: 'User signed out successfully!',
+      success: true,
       userLoggedIn: user.isLoggedIn
 
    });
