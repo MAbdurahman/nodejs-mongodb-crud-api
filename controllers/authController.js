@@ -97,10 +97,13 @@ export const signInUser = asyncHandler(async (req, res, next) => {
 });
 
 export const signOutUser = asyncHandler(async (req, res, next) => {
-   const user = toggleLoginStatus(req.params.id);
+   const {userId} = req.params;
+   const user = await User.findById(userId);
+   
    if (!user) {
       return next(messageHandler(res, false, 'User not found!', 404));
    }
+   await user.toggleIsLoggedIn();
 
    res.cookie('access_token', null, {
       expires: new Date(Date.now()),
@@ -110,7 +113,8 @@ export const signOutUser = asyncHandler(async (req, res, next) => {
    res.status(200).json({
       message: 'User signed out successfully!',
       success: true,
-      userLoggedIn: user.isLoggedIn
+      isLoggedIn: user.isLoggedIn
+   
 
    });
 });

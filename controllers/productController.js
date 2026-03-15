@@ -3,9 +3,7 @@ import asyncHandler from '../utils/asyncHandlerUtil.js';
 import messageHandler from '../utils/messageHandlerUtil.js';
 import APIFeatures from '../utils/apiFeaturesUtil.js';
 
-export const createProduct = asyncHandler(async (req, res, next) => {
-
-	
+export const createProductAdmin = asyncHandler(async (req, res, next) => {
 
    const product = await Product.create(req.body);
 
@@ -44,9 +42,11 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
 
 export const getAllProductsAdmin = asyncHandler(async (req, res, next) => {
 	const products = await Product.find();
+	const productsCount = products.length;
 
 	res.status(200).json({
 		message: 'Admin - all products retrieved successfully!',
+		productsCount,
 		success: true,
 		products,
 	});
@@ -80,7 +80,7 @@ export const getSingleProductAdmin = asyncHandler(async (req, res, next) => {
 });
 
 
-export const updateProduct = asyncHandler(async (req, res, next) => {
+export const updateProductAdmin = asyncHandler(async (req, res, next) => {
 	const { productId } = req.params;
 	let product = await Product.findById(productId);
 
@@ -101,7 +101,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
 	});
 });
 
-export const deleteProduct = asyncHandler(async (req, res, next) => {
+export const deleteProductAdmin= asyncHandler(async (req, res, next) => {
 	const { productId } = req.params;
 	let product = await Product.findById(productId);
 

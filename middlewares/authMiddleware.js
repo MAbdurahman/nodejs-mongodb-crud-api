@@ -6,19 +6,21 @@ import ErrorHandler from '../utils/errorHandlerUtil.js';
 
 export const authenticateUser = asyncHandler(async (req, res, next) => {
    const token = req.cookies?.access_token;
-
+   
    if (!token) {
-      return next(messageHandler(res, false, 'Must be signed in!', 401));
+      return next(messageHandler(res, false, 'User must be signed in!', 401));
    }
+
    const decodedData = await jwt.verify(token, process.env.JWT_SECRET);
 
-   req.user = await User?.findById(decodedData._id).select('-password');
+   req.user = await User?.findById(decodedData.id);
 
    next();
 
 });
 
 export const authorizeRoles = (...roles) => {
+   
    return (req, res, next) => {
       if (!roles.includes(req.user.role)) {
          return next(
