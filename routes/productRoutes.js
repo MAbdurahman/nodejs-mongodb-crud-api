@@ -1,3 +1,4 @@
+/*************************** imports ***************************/
 import express from 'express';
 import {
 	createProduct,
@@ -13,8 +14,10 @@ import {
 	authorizeRoles,
 } from '../middlewares/authMiddleware.js';
 
+/************************** variables **************************/
 const productsRouter = express.Router();
 
+/*************************** routes ***************************/
 productsRouter.get('/get-all-products', getAllProducts);
 productsRouter.get('/:productId', getSingleProduct);
 
