@@ -37,7 +37,7 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, error, 406));
    }
 
-   /************************* find out if an user already exists *************************/
+   /******************** find out if an user already exists ********************/
    const userAlreadyExists = await User?.findOne({email});
 
    if (userAlreadyExists) {
@@ -50,17 +50,17 @@ export const signUpUser = asyncHandler(async (req, res, next) => {
       fullname,
       email,
       password
-   })
+   });
 
-   const token = await newUser.generateJsonWebToken();
+   
+   const { password: pass, ...rest } = newUser._doc;
+
 
    res.status(201).json({
       message: `${getFirstName(fullname)} signed up successfully!`,
       success: true,
-      user: newUser
-   })
-
-
+      user: rest
+   });
 });
 
 export const signInUser = asyncHandler(async (req, res, next) => {

@@ -1,6 +1,5 @@
 
-import {Schema, model, Types} from 'mongoose';
-
+import {Schema, model} from 'mongoose';
 
 const productSchema = new Schema({
 	name: {
@@ -50,8 +49,8 @@ const productSchema = new Schema({
 	},
 	stock: {
 		type: Number,
-		required: [true, 'Enter product stock!'],
-		maxLength: [4, 'Stock cannot exceed 4 characters!'],
+		required: [true, 'Enter product in stock!'],
+		maxLength: [4, 'Stock number cannot exceed 4 characters!'],
 		default: 1,
 	},
 	numOfReviews: {
