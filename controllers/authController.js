@@ -214,7 +214,7 @@ export const getAllUsersAdmin = asyncHandler(async (req, res, next) => {
 	const count = users.length;
 
 	res.status(200).json({
-		message: 'All users retrieved successfully!',
+		message: 'Admin - all users retrieved successfully!',
 		success: true,
 		count: count,
 		users: users,
@@ -231,8 +231,8 @@ export const getSingleUserAdmin = asyncHandler(async (req, res, next) => {
 	}
 
 	res.status(200).json({
+		message: 'Admin - single user retrieved successfully!',
 		success: true,
-		message: 'Single user retrieved successfully!',
 		user: user,
 	});
 });
