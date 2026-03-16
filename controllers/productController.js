@@ -4,7 +4,7 @@ import messageHandler from '../utils/messageHandlerUtil.js';
 import APIFeatures from '../utils/apiFeaturesUtil.js';
 
 export const createProductAdmin = asyncHandler(async (req, res, next) => {
-
+	req.body.adminUser = req.user._id;
    const product = await Product.create(req.body);
 
 	res.status(201).json({
@@ -95,7 +95,7 @@ export const updateProductAdmin = asyncHandler(async (req, res, next) => {
 	});
 
 	res.status(200).json({
-		message: 'Product updated successfully!',
+		message: 'Admin - product updated successfully!',
 		success: true,
 		product,
 	});
@@ -112,7 +112,7 @@ export const deleteProductAdmin= asyncHandler(async (req, res, next) => {
 	await product.deleteOne();
 
 	res.status(200).json({
-		message: 'Product deleted successfully!',
+		message: 'Admin - product deleted successfully!',
 		success: true,
 		user: {},
 	});
