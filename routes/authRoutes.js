@@ -12,20 +12,21 @@ import {
 } from '../controllers/authController.js';
 import { authenticateUser } from '../middlewares/authMiddleware.js';
 
-/************************** variables **************************/
+/************************** variables ***************************/
 const authRouter = express.Router();
 
-/*************************** routes ***************************/
-authRouter.post('/sign-up', signUpUser);
-authRouter.post('/sign-in', signInUser);
-authRouter.post('/sign-out/', authenticateUser, signOutUser);
+/**************************** routes ****************************/
+authRouter.post('/auth/sign-up', signUpUser);
+authRouter.post('/auth/sign-in', signInUser);
+authRouter.post('/auth/sign-out', authenticateUser, signOutUser);
 
-authRouter.patch('/update-password/:userId', updatePassword);
-authRouter.put('/update-profile/:userId', updateProfile);
+/************************* admin routes *************************/
+authRouter.patch('/auth/update-password/:userId', updatePassword);
+authRouter.put('/auth/update-profile/:userId', updateProfile);
 
-authRouter.get('/get-all-users', getAllUsers);
-authRouter.get('/get-user/:userId', getSingleUser);
+authRouter.get('/auth/get-all-users', getAllUsers);
+authRouter.get('/auth/get-user/:userId', getSingleUser);
 
-authRouter.delete('/delete-user/:userId', deleteUser)
+authRouter.delete('/auth/delete-user/:userId', deleteUser);
 
 export default authRouter;

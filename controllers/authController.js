@@ -113,12 +113,13 @@ const user = req.user;
    res.status(200).json({
       message: 'User signed out successfully!',
       success: true,
+      isLoggedIn: user.isLoggedIn
 
    });
 });
 
 export const updatePassword = asyncHandler(async (req, res, next) => {
-   const {id} = req.params;
+   const {userId} = req.params;
    const {password} = req.body;
 
    if (!password) {
@@ -129,7 +130,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
       return next(messageHandler(res, false, error, 406));
    }
 
-   const user = await User.findById(id);
+   const user = await User.findById(userId);
    if (!user) {
       return next(messageHandler(res, false, 'User not found!', 404));
    }
@@ -174,10 +175,10 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
 });
 
 export const getSingleUser = asyncHandler(async (req, res, next) => {
-   const user = await User.findById(req.params.id).select('-password');
+   const user = await User.findById(req.params.userId).select('-password');
 
    if (!user) {
-      return next(messageHandler(res, false, `User does not found with id: ${req.params.id}`, 404));
+      return next(messageHandler(res, false, `User not found with id: ${req.params.userId}`, 404));
    }
 
    res.status(200).json({
@@ -188,10 +189,10 @@ export const getSingleUser = asyncHandler(async (req, res, next) => {
 });
 
 export const deleteUser = asyncHandler(async (req, res, next) => {
-   const user = await User.findById(req.params.id).select('+password');
+   const user = await User.findById(req.params.userId).select('+password');
 
    if (!user) {
-      return next(messageHandler(res, false, `User is not found with id: ${req.params.id}`, 404));
+      return next(messageHandler(res, false, `User is not found with id: ${req.params.userId}`, 404));
    }
 
    await User.deleteOne({_id: user._id});
