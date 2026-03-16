@@ -6,11 +6,13 @@ import {
    signOutUser,
    updatePassword,
    updateProfile,
-   getAllUsers,
-   getSingleUser,
-   deleteUser
+   getAllUsersAdmin,
+   getSingleUserAdmin,
+   updatePasswordAdmin,
+   updateProfileAdmin,
+   deleteUserAdmin
 } from '../controllers/authController.js';
-import { authenticateUser } from '../middlewares/authMiddleware.js';
+import { authenticateUser, authorizeRoles } from '../middlewares/authMiddleware.js';
 
 /************************** variables ***************************/
 const authRouter = express.Router();
@@ -19,14 +21,15 @@ const authRouter = express.Router();
 authRouter.post('/auth/sign-up', signUpUser);
 authRouter.post('/auth/sign-in', signInUser);
 authRouter.post('/auth/sign-out', authenticateUser, signOutUser);
+authRouter.patch('/auth/update-password/:userId', authenticateUser, updatePassword);
+authRouter.put('/auth/update-profile/:userId', authenticateUser, updateProfile);
 
 /************************* admin routes *************************/
-authRouter.patch('/auth/update-password/:userId', updatePassword);
-authRouter.put('/auth/update-profile/:userId', updateProfile);
-
-authRouter.get('/auth/get-all-users', getAllUsers);
-authRouter.get('/auth/get-user/:userId', getSingleUser);
-
-authRouter.delete('/auth/delete-user/:userId', deleteUser);
+authRouter.get('/admin/auth/get-all-users', authenticateUser, authorizeRoles('admin'), 
+getAllUsersAdmin);
+authRouter.get('/admin/auth/get-all-users/:userId', authenticateUser, authorizeRoles('admin'),getSingleUserAdmin);
+authRouter.patch('/admin/auth/get-all-users/:userId',authenticateUser, authorizeRoles('admin'), updatePasswordAdmin);
+authRouter.put('/admin/auth/get-all-users/:userId', authenticateUser, authorizeRoles('admin'),   updateProfileAdmin);
+authRouter.delete('/admin/auth/get-all-users/:userId', authenticateUser, authorizeRoles('admin'), deleteUserAdmin);
 
 export default authRouter;

@@ -75,6 +75,7 @@ userSchema.methods.generateJsonWebToken = function () {
 
 /****************** generate resetPasswordToken ********************/
 userSchema.methods.generateResetPasswordToken = function () {
+	
 	/**************** generate the token ****************/
 	const resetToken = crypto.randomBytes(20).toString('hex');
 
