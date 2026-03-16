@@ -24,7 +24,7 @@ authRouter.post('/auth/sign-in', signInUser);
 authRouter.post('/auth/sign-out', authenticateUser, signOutUser);
 authRouter.get('/auth/current-user-profile', authenticateUser, getCurrentUserProfile);
 authRouter.patch('/auth/update-password', authenticateUser, updatePassword);
-authRouter.put('/auth/update-profile/:userId', authenticateUser, updateProfile);
+authRouter.put('/auth/update-profile', authenticateUser, updateProfile);
 
 /************************* admin routes *************************/
 authRouter.get('/admin/auth/get-all-users', authenticateUser, authorizeRoles('admin'), 
