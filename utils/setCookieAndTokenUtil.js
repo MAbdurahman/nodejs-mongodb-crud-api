@@ -8,7 +8,7 @@ export default function setCookieAndToken(user, res, statusCode) {
 	const milliseconds_month = milliseconds_day * 30;
 	const expiryDate = new Date(Date.now() + milliseconds_week);
 
-   user.toggleIsLoggedIn();
+   /* user.toggleIsLoggedIn(); */
    const token = user.generateJsonWebToken();
    const { password: pass, ...rest } = user._doc;
 

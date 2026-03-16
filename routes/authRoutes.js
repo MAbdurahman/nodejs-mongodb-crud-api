@@ -4,6 +4,7 @@ import {
    signUpUser,
    signInUser,
    signOutUser,
+   getCurrentUserProfile,
    updatePassword,
    updateProfile,
    getAllUsersAdmin,
@@ -21,7 +22,8 @@ const authRouter = express.Router();
 authRouter.post('/auth/sign-up', signUpUser);
 authRouter.post('/auth/sign-in', signInUser);
 authRouter.post('/auth/sign-out', authenticateUser, signOutUser);
-authRouter.patch('/auth/update-password/:userId', authenticateUser, updatePassword);
+authRouter.get('/auth/current-user-profile', authenticateUser, getCurrentUserProfile);
+authRouter.patch('/auth/update-password', authenticateUser, updatePassword);
 authRouter.put('/auth/update-profile/:userId', authenticateUser, updateProfile);
 
 /************************* admin routes *************************/

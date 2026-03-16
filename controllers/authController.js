@@ -89,6 +89,7 @@ export const signInUser = asyncHandler(async (req, res, next) => {
 		return next(messageHandler(res, false, 'Invalid credentials!', 401));
 	}
 
+   await isValidUser.toggleIsLoggedIn();
 	setCookieAndToken(isValidUser, res, 200);
 });
 
@@ -112,16 +113,25 @@ export const signOutUser = asyncHandler(async (req, res, next) => {
 	});
 });
 
-export const updatePassword = asyncHandler(async (req, res, next) => {
-	const { userId } = req.params;
-	const { oldPassword, newPassword } = req.body;
-	const userData = await User.findById(userId).select('+password');
+export const getCurrentUserProfile = asyncHandler(async (req, res, next) => {
+   const user = await User.findById(req?.user?._id).select('-password'); 
 
-	if (!userData) {
+   res.status(200).json({
+      message: `Current user's profile retrieved successfully!`,
+      success: true,
+      user: user,
+   });
+});
+
+export const updatePassword = asyncHandler(async (req, res, next) => {
+	const { oldPassword, newPassword } = req.body;
+	const user = await User.findById(req.user.id).select('+password');
+
+	if (!user) {
 		return next(messageHandler(res, false, 'User not found!', 404));
 	}
 
-	const isOldPasswordValid = await usersData.comparePassword(oldPassword);
+	const isOldPasswordValid = await user.comparePassword(oldPassword);
 	if (!isOldPasswordValid) {
 		return next(messageHandler(res, false, 'Old password is incorrect!', 401));
 	}
@@ -134,10 +144,10 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 		return next(messageHandler(res, false, error, 406));
 	}
 
-	userData.password = newPassword;
-	await userData.save();
+	user.password = newPassword;
+	await user.save();
 
-	setCookieAndToken(userData, res, 200);
+	setCookieAndToken(user, res, 200);
 });
 
 export const updatePasswordAdmin = asyncHandler(async (req, res, next) => {
@@ -150,15 +160,15 @@ res.status(200).json({
 
 export const updateProfile = asyncHandler(async (req, res, next) => {
 	res.status(200).json({
-		success: true,
 		message: 'Update profile successfully!',
+		success: true,
 	});
 });
 
 export const updateProfileAdmin = asyncHandler(async (req, res, next) => {
    res.status(200).json({
-      success: true,
       message: 'Admin - update profile successfully!',
+      success: true,
    });
 });
 
@@ -166,20 +176,13 @@ export const getAllUsersAdmin = asyncHandler(async (req, res, next) => {
 	const users = await User.find();
 
 	if (!users) {
-		return next(
-			messageHandler(
-				res,
-				false,
-				`This resource ${User} does not exist!`,
-				404
-			)
-		);
+		return next(messageHandler(res, false,`This resource ${User} does not exist!`, 404));
 	}
-	const count = await User.countDocuments({});
+	const count = users.length;
 
 	res.status(200).json({
-		success: true,
 		message: 'All users retrieved successfully!',
+		success: true,
 		count: count,
 		users: users,
 	});
