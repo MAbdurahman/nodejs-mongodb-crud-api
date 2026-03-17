@@ -89,7 +89,10 @@ export const signInUser = asyncHandler(async (req, res, next) => {
 		return next(messageHandler(res, false, 'Invalid credentials!', 401));
 	}
 
-   await isValidUser.toggleIsLoggedIn();
+	if (!isValidUser.isLoggedIn) {
+		await isValidUser.toggleIsLoggedIn();
+	}
+
 	setCookieAndToken(isValidUser, res, 200);
 });
 

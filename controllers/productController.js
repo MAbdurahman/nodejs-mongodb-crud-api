@@ -41,7 +41,7 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
 });
 
 export const getAllProductsAdmin = asyncHandler(async (req, res, next) => {
-	const products = await Product.find();
+	const products = await Product.find().sort({name: 1});
 	const productsCount = products.length;
 
 	res.status(200).json({
@@ -79,7 +79,6 @@ export const getSingleProductAdmin = asyncHandler(async (req, res, next) => {
 	});
 });
 
-
 export const updateProductAdmin = asyncHandler(async (req, res, next) => {
 	const { productId } = req.params;
 	let product = await Product.findById(productId);
@@ -109,7 +108,7 @@ export const deleteProductAdmin= asyncHandler(async (req, res, next) => {
 		return next(messageHandler(res, 'Product not found!', 404));
 	}
 
-	await product.deleteOne();
+	await Product.deleteOne({_id: product._id});
 
 	res.status(200).json({
 		message: 'Admin - product deleted successfully!',
