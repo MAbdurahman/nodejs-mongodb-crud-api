@@ -69,3 +69,5 @@ or
 ```shell
 yarn prod
 ```
+
+![Image](https://github.com/user-attachments/assets/89d1e9c4-e1ee-4f2a-95eb-dcec7a32e472)
