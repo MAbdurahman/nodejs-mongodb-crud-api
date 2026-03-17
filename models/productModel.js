@@ -15,7 +15,7 @@ const productSchema = new Schema({
 		type: Number,
 		required: [true, 'Enter the product price!'],
 		maxLength: [8, 'The product price cannot be greater than eight digits.!'],
-      default: 0.00
+      default: 0.0
 	},
 	ratings: {
 		type: Number,

@@ -15,17 +15,17 @@ import {
 } from '../middlewares/authMiddleware.js';
 
 /*************************** variables ***************************/
-const productsRouter = express.Router();
+const router = express.Router();
 
 /**************************** routes ****************************/
-productsRouter.get('/products/get-all-products', authenticateUser, getAllProducts);
-productsRouter.get('/products/:productId', authenticateUser, getSingleProduct);
+router.get('/products', authenticateUser, getAllProducts);
+router.get('/products/:productId', authenticateUser, getSingleProduct);
 
 /************************* admin routes *************************/
-productsRouter.get('/admin/products/get-all-products', authenticateUser, authorizeRoles('admin'), getAllProductsAdmin);
-productsRouter.get('/admin/products/:productId', authenticateUser, authorizeRoles('admin'), getSingleProductAdmin);	
-productsRouter.post('/admin/products/create-product', authenticateUser, authorizeRoles('admin'), createProductAdmin);
-productsRouter.put('/admin/products/:productId', authenticateUser, authorizeRoles('admin'), updateProductAdmin);
-productsRouter.delete('/admin/products/:productId', authenticateUser, authorizeRoles('admin'), deleteProductAdmin);
+router.post('/admin/products', authenticateUser, authorizeRoles('admin'), createProductAdmin);
+router.get('/admin/products', authenticateUser, authorizeRoles('admin'), getAllProductsAdmin);
+router.get('/admin/products/:productId', authenticateUser, authorizeRoles('admin'),getSingleProductAdmin);
+router.put('/admin/products/:productId', authenticateUser, authorizeRoles('admin'), updateProductAdmin);
+router.delete('/admin/products/:productId', authenticateUser, authorizeRoles('admin'),deleteProductAdmin);
 
-export default productsRouter;
+export default router;

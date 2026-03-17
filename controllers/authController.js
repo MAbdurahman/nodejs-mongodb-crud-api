@@ -199,9 +199,51 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
 });
 
 export const updateProfileAdmin = asyncHandler(async (req, res, next) => {
+	const {userId} = req.params;
+	const {fullname, email, role} = req.body;
+
+	const user = await User.findById(userId);
+	if (!user) {
+		return next(messageHandler(res, false, 'User not found!', 404));
+	}
+
+	if (fullname) {
+		if (validateFullname(fullname).isValid === false) {
+			const { error } = validateFullname(fullname);
+			return next(messageHandler(res, false, error, 406));
+		}
+	}
+
+	if (email) {
+		if (validateEmail(email).isValid === false) {
+			const { error } = validateEmail(email);
+			return next(messageHandler(res, false, error, 406));
+		}
+	}
+
+	if (role) {
+		if (!['user', 'admin'].includes(role)) {
+			return next(messageHandler(res, false, 'Invalid role!', 400));
+		}
+	}
+
+	const userNewData = {
+		fullname: fullname || user.fullname,
+		email: email || user.email,
+		role: role || user.role,
+	};
+
+	const updatedUser = await User.findByIdAndUpdate(userId, userNewData, {
+		new: true,
+		runValidators: true,
+		useFindAndModify: false,
+	}).select('-password');
+
+
    res.status(200).json({
-      message: 'Admin - update profile successfully!',
+      message: 'Admin - updated user profile successfully!',
       success: true,
+		user: updatedUser
    });
 });
 
@@ -222,11 +264,12 @@ export const getAllUsersAdmin = asyncHandler(async (req, res, next) => {
 });
 
 export const getSingleUserAdmin = asyncHandler(async (req, res, next) => {
-	const user = await User.findById(req.params.userId).select('-password');
+	const { userId } = req.params;
+	const user = await User.findById(userId).select('-password');
 
 	if (!user) {
 		return next(
-			messageHandler(res, false, `User not found with id: ${req.params.userId}`, 404)
+			messageHandler(res, false, `User not found with id: ${userId}`, 404)
 		);
 	}
 
@@ -238,24 +281,19 @@ export const getSingleUserAdmin = asyncHandler(async (req, res, next) => {
 });
 
 export const deleteUserAdmin = asyncHandler(async (req, res, next) => {
-	const user = await User.findById(req.params.userId).select('+password');
+	const { userId } = req.params;
+	const user = await User.findById(userId).select('+password');
 
 	if (!user) {
 		return next(
-			messageHandler(
-				res,
-				false,
-				`User is not found with id: ${req.params.userId}`,
-				404
-			)
-		);
+			messageHandler(res, false,`User not found with id: ${userId}`,404));
 	}
 
 	await User.deleteOne({ _id: user._id });
 
 	res.status(200).json({
+		message: 'Admin - user deleted successfully!',
 		success: true,
-		message: 'User deleted successfully!',
 		user: {},
 	});
 });

@@ -9,29 +9,26 @@ import {
    updateProfile,
    getAllUsersAdmin,
    getSingleUserAdmin,
-   updatePasswordAdmin,
    updateProfileAdmin,
    deleteUserAdmin
 } from '../controllers/authController.js';
 import { authenticateUser, authorizeRoles } from '../middlewares/authMiddleware.js';
 
 /************************** variables ***************************/
-const authRouter = express.Router();
+const router = express.Router();
 
 /**************************** routes ****************************/
-authRouter.post('/auth/sign-up', signUpUser);
-authRouter.post('/auth/sign-in', signInUser);
-authRouter.post('/auth/sign-out', authenticateUser, signOutUser);
-authRouter.get('/auth/current-user-profile', authenticateUser, getCurrentUserProfile);
-authRouter.patch('/auth/update-password', authenticateUser, updatePassword);
-authRouter.put('/auth/update-profile', authenticateUser, updateProfile);
+router.post('/auth/sign-up', signUpUser);
+router.post('/auth/sign-in', signInUser);
+router.post('/auth/sign-out', authenticateUser, signOutUser);
+router.get('/auth/users', authenticateUser, getCurrentUserProfile);
+router.patch('/auth/users', authenticateUser, updatePassword);
+router.put('/auth/users', authenticateUser, updateProfile);
 
 /************************* admin routes *************************/
-authRouter.get('/admin/auth/get-all-users', authenticateUser, authorizeRoles('admin'), 
-getAllUsersAdmin);
-authRouter.get('/admin/auth/get-all-users/:userId', authenticateUser, authorizeRoles('admin'),getSingleUserAdmin);
-authRouter.patch('/admin/auth/get-all-users/:userId',authenticateUser, authorizeRoles('admin'), updatePasswordAdmin);
-authRouter.put('/admin/auth/get-all-users/:userId', authenticateUser, authorizeRoles('admin'),   updateProfileAdmin);
-authRouter.delete('/admin/auth/get-all-users/:userId', authenticateUser, authorizeRoles('admin'), deleteUserAdmin);
+router.get('/admin/auth/users', authenticateUser, authorizeRoles('admin'), getAllUsersAdmin);
+router.get('/admin/auth/users/:userId', authenticateUser, authorizeRoles('admin'),getSingleUserAdmin);
+router.put('/admin/auth/users/:userId', authenticateUser, authorizeRoles('admin'),   updateProfileAdmin);
+router.delete('/admin/auth/users/:userId', authenticateUser, authorizeRoles('admin'), deleteUserAdmin);
 
-export default authRouter;
+export default router;
