@@ -2,7 +2,12 @@
 
 ## Description 
 <p>nodejs-mongodb-crud-api is a Node.js application connecting to MongoDB, defining
-schemas with Mongoose, and implementing CRUD operations with Express.js</p>
+schemas with Mongoose, and implementing CRUD operations with Express.js. Product has 
+query functionality with based on 'keyword' and productSchema property 'name'; search
+functionality based on 'category', 'price', 'rating'; pagination functionality based
+on 'page' and a number value. In order for the middlewares/errorsMiddleware.js to 
+operation with its stack trace, in the config.env file, NODE_ENV needs to be in
+lowercase, i.e, 'development' or 'production'.</p>
 
 ## Features
 - Node.js
@@ -17,8 +22,8 @@ schemas with Mongoose, and implementing CRUD operations with Express.js</p>
 ```env
 # Useful Variables
 PORT=
-NODE_ENV=
-BACKEND_URL=
+NODE_ENV='development'
+BACKEND_URL='http://localhost'
 FRONTEND_URL=
 PAGINATION_LIMIT=
 CURRENCY="USD"
@@ -28,11 +33,12 @@ MONGO_DB_URI=
 
 # JSON Web Token
 JWT_SECRET=
-JWT_EXPIRES_TIME=
-JWT_LIFETIME='400d'
+JWT_EXPIRES_TIME='604800000ms'
+JWT_LIFETIME='3.1104e10ms'
 
-# Passcode 
-PASS_CODE_SECRET=
+# Cookie Token
+COOKIE_EXPIRES_TIME=21d
+
 
 ```
 
