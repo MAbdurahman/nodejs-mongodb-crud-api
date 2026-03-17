@@ -9,6 +9,8 @@ on 'page' and a number value. In order for the middlewares/errorsMiddleware.js t
 operation with its stack trace, in the config.env file, NODE_ENV needs to be in
 lowercase, i.e, 'development' or 'production'.</p>
 
+<p>Populate the database with users and products. See "scripts" in package.json</p>
+
 ## Features
 - Node.js
 - Express.js
