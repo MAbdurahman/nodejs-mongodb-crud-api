@@ -150,14 +150,6 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
 	setCookieAndToken(user, res, 200);
 });
 
-export const updatePasswordAdmin = asyncHandler(async (req, res, next) => {
-res.status(200).json({
-   message: 'Admin - update password successfully!',
-      success: true
-   });   
-});
-
-
 export const updateProfile = asyncHandler(async (req, res, next) => {
    const { fullname, email } = req.body;
 
@@ -248,7 +240,7 @@ export const updateProfileAdmin = asyncHandler(async (req, res, next) => {
 });
 
 export const getAllUsersAdmin = asyncHandler(async (req, res, next) => {
-	const users = await User.find();
+	const users = await User.find().sort({fullname: 1});
 
 	if (!users) {
 		return next(messageHandler(res, false,`This resource ${User} does not exist!`, 404));
@@ -297,4 +289,3 @@ export const deleteUserAdmin = asyncHandler(async (req, res, next) => {
 		user: {},
 	});
 });
-
