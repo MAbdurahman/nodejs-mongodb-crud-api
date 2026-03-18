@@ -110,7 +110,7 @@ export const signOutUser = asyncHandler(async (req, res, next) => {
 	});
 
 	res.status(200).json({
-		message: 'User signed out successfully!',
+		message: `${getFirstName(user?.fullname)} signed out successfully!`,
 		success: true,
 		isLoggedIn: user.isLoggedIn,
 	});
@@ -120,7 +120,7 @@ export const getCurrentUserProfile = asyncHandler(async (req, res, next) => {
    const user = await User.findById(req?.user?._id).select('-password'); 
 
    res.status(200).json({
-      message: `Current user's profile retrieved successfully!`,
+      message: `${user?.fullname} retrieved profile successfully!`,
       success: true,
       user: user,
    });
@@ -187,7 +187,7 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
    }
 
 	res.status(200).json({
-		message: 'User updated profile successfully!',
+		message: `${user?.fullname} updated profile successfully!`,
 		success: true,
       user: user,
 	});
@@ -223,9 +223,9 @@ export const updateProfileAdmin = asyncHandler(async (req, res, next) => {
 	}
 
 	const userNewData = {
-		fullname: fullname || user.fullname,
-		email: email || user.email,
-		role: role || user.role,
+		fullname: fullname || user?.fullname,
+		email: email || user?.email,
+		role: role || user?.role,
 	};
 
 	const updatedUser = await User.findByIdAndUpdate(userId, userNewData, {
@@ -236,7 +236,7 @@ export const updateProfileAdmin = asyncHandler(async (req, res, next) => {
 
 
    res.status(200).json({
-      message: 'Admin - updated user profile successfully!',
+      message: `Admin - ${updatedUser?.fullname} updated profile successfully!`,
       success: true,
 		user: updatedUser
    });
@@ -269,7 +269,7 @@ export const getSingleUserAdmin = asyncHandler(async (req, res, next) => {
 	}
 
 	res.status(200).json({
-		message: 'Admin - single user retrieved successfully!',
+		message: `Admin -  Retrieved ${user?.fullname}'s profile successfully! `,
 		success: true,
 		user: user,
 	});
