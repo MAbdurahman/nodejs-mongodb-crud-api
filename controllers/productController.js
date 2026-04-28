@@ -113,6 +113,6 @@ export const deleteProductAdmin= asyncHandler(async (req, res, next) => {
 	res.status(200).json({
 		message: 'Admin - product deleted successfully!',
 		success: true,
-		user: {},
+		product: {},
 	});
 });
